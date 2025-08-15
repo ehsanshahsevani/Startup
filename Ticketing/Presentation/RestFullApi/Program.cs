@@ -125,19 +125,19 @@ app.ConfigureExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
-    ServerSettings.DomainApiProjectManager = "https://localhost:6061";
-    ServerSettings.DomainApiAttachmentManager = "https://localhost:9091";
-    ServerSettings.DomainApiMarketPlace = "https://localhost:5051";
-    ServerSettings.DomainAdmin = "https://admin.decoyab.com";
-    ServerSettings.DomainWeb = "https://decoyab.com";
+    ServerSettings.DomainApiProjectManager = "";
+    ServerSettings.DomainApiAttachmentManager = "";
+    ServerSettings.DomainApiMarketPlace = "";
+    ServerSettings.DomainAdmin = "";
+    ServerSettings.DomainWeb = "";
 }
 else if (app.Environment.IsProduction())
 {
-    ServerSettings.DomainApiProjectManager = "https://ToolsA.decoyab.com";
-    ServerSettings.DomainApiAttachmentManager = "https://ToolsB.decoyab.com";
-    ServerSettings.DomainApiMarketPlace = "https://MarketplaceApi.decoyab.com";
-    ServerSettings.DomainAdmin = "https://admin.decoyab.com";
-    ServerSettings.DomainWeb = "https://decoyab.com";
+    ServerSettings.DomainApiProjectManager = "";
+    ServerSettings.DomainApiAttachmentManager = "";
+    ServerSettings.DomainApiMarketPlace = "";
+    ServerSettings.DomainAdmin = "";
+    ServerSettings.DomainWeb = "";
 }
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
