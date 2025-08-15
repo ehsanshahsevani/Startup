@@ -1,0 +1,156 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+        <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.8" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
+        <PackageReference Include="Microsoft.NET.Sdk.WebAssembly.Pack" Version="9.0.8" />
+        <PackageReference Include="Scrutor" Version="6.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\Button.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonCancel.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonCreate.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonDeleteImage.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonDeleteTable.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonMinus.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonMoveCategory.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonMoveToPriceRequest.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonPlus.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonSaveChanges.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\ButtonUpdateTable.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\SearchButton.razor" />
+      <_ContentIncludedByDefault Remove="Components\Buttons\Update_Delete.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\Card.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\CardBody.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\CardFooter.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\CardHeader.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\Form.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\FormControlSection.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\FormSearch.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\FormStructure\FormShopSignature.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Input\InputCheckBoxCustom.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Input\InputFileCustom.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Input\InputNumberCustom.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Input\InputSearchCustom.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Input\InputTextCustom.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Input\TextAreaCustom.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Lable\Label.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Lable\LabelCheck.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Lable\LabelEmpty.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Lable\LabelText.razor" />
+      <_ContentIncludedByDefault Remove="Components\Form\Lable\LablePoint.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\Table.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\TableBody.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\TableData.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\TableHead.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\TableHeader.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\TableRow.razor" />
+      <_ContentIncludedByDefault Remove="Components\Table\TableSection.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalComponent.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalDeleteQuestion.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalLoading.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalQuestion.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalQuestionDeleteAttachments.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalSystemError.razor" />
+      <_ContentIncludedByDefault Remove="Components\Modal\ModalUpdateQuestion.razor" />
+      <_ContentIncludedByDefault Remove="Components\Toast\MessageToast.razor" />
+      <_ContentIncludedByDefault Remove="Components\Toast\ToastBootstrap.razor" />
+      <_ContentIncludedByDefault Remove="Components\DropDown\DropdownMenu.razor" />
+      <_ContentIncludedByDefault Remove="Components\DropDown\DropdownMenuItem.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectAttribute.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectAttributeValue.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectCategory.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectPersonType.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectProductTitle.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectProductTitleForShop.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectShop.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectShopType.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectUnit.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Select\SelectValue.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Tag\TagCategory.razor" />
+      <_ContentIncludedByDefault Remove="Components\ComponentData\Tag\TagShop.razor" />
+      <_ContentIncludedByDefault Remove="Components\CustomErrorBoundary.razor" />
+      <_ContentIncludedByDefault Remove="Components\FileThumbnailViewre.razor" />
+      <_ContentIncludedByDefault Remove="Components\ImageViewer.razor" />
+      <_ContentIncludedByDefault Remove="Components\PageDescription.razor" />
+      <_ContentIncludedByDefault Remove="Components\PaginationSystem.razor" />
+      <_ContentIncludedByDefault Remove="Components\ShowTime.razor" />
+      <_ContentIncludedByDefault Remove="Components\TagViewer.razor" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <GenerateMvcApplicationPartsAssemblyAttributes>false</GenerateMvcApplicationPartsAssemblyAttributes>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\SharedSystem\Shared\BlazorComponents\BlazorComponents.csproj" />
+      <ProjectReference Include="..\..\..\SharedSystem\Shared\HttpServices\HttpServices.csproj" />
+      <ProjectReference Include="..\..\Shared\RazorPages\RazorPages.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Content Remove="Components\Table\Td.razor" />
+      <Content Remove="Components\Table\Th.razor" />
+      <Content Remove="Components\Table\Tr.razor" />
+      <Content Remove="Pages\PageModal\**" />
+      <Content Remove="Components\Buttons\**" />
+      <Content Remove="Components\Form\**" />
+      <Content Remove="Components\Table\**" />
+      <Content Remove="Components\Modal\**" />
+      <Content Remove="Components\Toast\**" />
+      <Content Remove="Infrastructure\**" />
+      <Content Remove="Components\DropDown\**" />
+      <Content Remove="Components\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="Pages\PageModal\**" />
+      <Compile Remove="Components\Buttons\**" />
+      <Compile Remove="Components\Form\**" />
+      <Compile Remove="Components\Models\ShopOwnerSignature.cs" />
+      <Compile Remove="Components\Table\**" />
+      <Compile Remove="Components\Modal\**" />
+      <Compile Remove="Components\Toast\**" />
+      <Compile Remove="Infrastructure\**" />
+      <Compile Remove="Components\DropDown\**" />
+      <Compile Remove="Components\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Remove="Pages\PageModal\**" />
+      <EmbeddedResource Remove="Components\Buttons\**" />
+      <EmbeddedResource Remove="Components\Form\**" />
+      <EmbeddedResource Remove="Components\Table\**" />
+      <EmbeddedResource Remove="Components\Modal\**" />
+      <EmbeddedResource Remove="Components\Toast\**" />
+      <EmbeddedResource Remove="Infrastructure\**" />
+      <EmbeddedResource Remove="Components\DropDown\**" />
+      <EmbeddedResource Remove="Components\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Remove="Pages\PageModal\**" />
+      <None Remove="Components\Buttons\**" />
+      <None Remove="Components\Form\**" />
+      <None Remove="Components\Table\**" />
+      <None Remove="Components\Modal\**" />
+      <None Remove="Components\Toast\**" />
+      <None Remove="Infrastructure\**" />
+      <None Remove="Components\DropDown\**" />
+      <None Remove="Components\**" />
+    </ItemGroup>
+
+</Project>

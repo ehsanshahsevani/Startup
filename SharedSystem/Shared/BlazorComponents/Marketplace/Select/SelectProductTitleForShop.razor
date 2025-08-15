@@ -1,0 +1,147 @@
+@inject ProductTitleService ProductTitleService
+@inject RequestResultService RequestResultService
+
+@inject PageState PageState
+
+<select
+    class="form-select fs-12px"
+    @onchange="HandleChange"
+    disabled="@(_disabled)"
+    aria-label="Dropdown select">
+    <option value="">@(Placeholder)</option>
+    @if (List is not null)
+    {
+        @foreach (var option in List)
+        {
+            @if (option.ValueId == SelectedValue)
+            {
+                <option value="@(option.ValueId)" selected="selected">
+                    @(option.Value)
+                </option>
+            }
+            else
+            {
+                <option value="@(option.ValueId)">
+                    @(option.Value)
+                </option>
+            }
+        }
+    }
+</select>
+
+@code {
+    [Parameter] public string? SelectedValue { get; set; }
+
+    [Parameter] public EventCallback<string> SelectedValueChanged { get; set; }
+
+    private List<UiSelectModel>? List { get; set; }
+
+    [Parameter] public string Placeholder { get; set; } = "انتخاب کنید";
+
+    private string? _oldShopId = null;
+
+    private bool _disabled = false;
+    
+    [Parameter] public string? ShopId { get; set; }
+
+    public SelectProductTitleForShop()
+    {
+        List = new List<UiSelectModel>();
+        SelectedValue = null;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (PageState.ProductTitleLocked == true)
+        {
+            SelectedValue = PageState.ProductTitleId;
+            _disabled = PageState.ProductTitleLocked;
+        }
+        
+        if (string.IsNullOrEmpty(ShopId) == false)
+        {
+            _oldShopId = ShopId;
+
+            await SetListAsync(_oldShopId);
+
+            if (SelectedValueChanged.HasDelegate)
+            {
+                await SelectedValueChanged.InvokeAsync(SelectedValue);
+            }
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_oldShopId != ShopId)
+        {
+            _oldShopId = ShopId;
+
+            await ShopIdChangedAsync(ShopId);
+        }
+    }
+
+    private async Task ShopIdChangedAsync(string? shopId)
+    {
+        if (string.IsNullOrEmpty(shopId) == false)
+        {
+            await SetListAsync(shopId);
+        }
+        else
+        {
+            SelectedValue = null;
+
+            List = new List<UiSelectModel>();
+
+            if (SelectedValueChanged.HasDelegate)
+            {
+                await SelectedValueChanged.InvokeAsync(SelectedValue);
+            }
+        }
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        SelectedValue = e.Value?.ToString();
+
+        if (SelectedValueChanged.HasDelegate)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+    }
+
+    private async Task SetListAsync(string shopId)
+    {
+        SelectedValue = null;
+        
+        var backUpPlaceholder = Placeholder;
+        Placeholder = "درحال دریافت اطلاعات ...";
+
+        StateHasChanged();
+
+        var result =
+            await ProductTitleService.GetDropDownDataForShopIdAsync(shopId);
+
+        if (result.IsSuccess == true)
+        {
+            List = result.Value;
+
+            if (List is not null && List.Any() == true)
+            {
+                SelectedValue = List.First().ValueId;
+            }
+        }
+        else
+        {
+            RequestResultService.AddResult(result);
+        }
+
+        if (SelectedValueChanged.HasDelegate)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+        
+        Placeholder = backUpPlaceholder;
+    }
+
+}

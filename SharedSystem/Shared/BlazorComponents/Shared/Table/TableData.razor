@@ -1,0 +1,46 @@
+<td colspan="@(Colspan)"
+    class="@(Infrastructure.Utility.GetTableColorByBootstrapColor(TableColor))"
+    title="@(Title)"
+    style="@(style)">
+    @if (string.IsNullOrEmpty(Data) == true || Data.Trim() == "|")
+    {
+        @if (ChildContent is not null)
+        {
+            @(ChildContent)
+        }
+        else
+        {
+            <LabelEmpty BackgroundColor="BootstrapColor.Dark">
+                @(Resources.DataDictionary.NoSaved)
+            </LabelEmpty>
+        }
+    }
+    else
+    {
+        @(Data)
+    }
+</td>
+
+@code {
+    [Parameter] public int Colspan { get; set; } = 1;
+    [Parameter] public BootstrapColor TableColor { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Data { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public int? MaxWidth { get; set; }
+
+    private string style;
+    
+    public TableData() : base()
+    {
+    }
+    
+    protected override void OnParametersSet()
+    {
+        if (MaxWidth.HasValue == true)
+        {
+            style = $"max-width: {MaxWidth}px;";
+        }
+    }
+
+}

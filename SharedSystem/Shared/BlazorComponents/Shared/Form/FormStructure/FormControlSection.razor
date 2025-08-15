@@ -1,0 +1,13 @@
+<div class="@(Class) @(IsTextStart ? "text-start" : "") @(IsTextCenter == true ? "text-center": "") @(OneRow == true ? "col-lg-12" : "") @(Hidden == true ? "d-none" : String.Empty) @(IsCheckBoxSection == true ? "mb-3 col text-center align-self-center mt-3" : "")">
+    @(ChildContent)
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Class { get; set; } = "mb-3";
+    [Parameter] public bool OneRow { get; set; } = false;
+    [Parameter] public bool Hidden { get; set; } = false;
+    [Parameter] public bool IsCheckBoxSection { get; set; } = false;
+    [Parameter] public bool IsTextCenter { get; set; }
+    [Parameter] public bool IsTextStart { get; set; } = false;
+}

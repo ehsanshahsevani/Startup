@@ -1,0 +1,23 @@
+<Label For="@(For)" Class="form-check-label px-1">
+    @if (ChildContent is null)
+    {
+        @: هیچ عنوانی ثبت نشده
+    }
+    else
+    {
+        @(ChildContent)
+    }
+    
+    @if (string.IsNullOrEmpty(Description) == false)
+    {
+        @:[ @(Description) ]
+    }
+</Label>
+
+@code {
+    [Parameter] public string? For { get; set; }
+
+    [Parameter] public string? Description { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

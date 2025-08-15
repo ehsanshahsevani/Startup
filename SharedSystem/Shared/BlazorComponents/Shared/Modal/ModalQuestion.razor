@@ -1,0 +1,68 @@
+<ModalComponent ModalId="@(ModalId)" @ref="_modal" Title="@(Title)" HasFooter="false" HeaderBckgroundColor="@(Color)">
+    @if (ChildContent is not null)
+    {
+        @(ChildContent)
+    }
+
+    <div class="modal-footer m-0 p-0">
+        <Button BootstrapColor="BootstrapColor.Primary"
+                IsWidth100="false"
+                Title="@(Resources.DataDictionary.Yes)"
+                OnCLick="OnYesClicked">
+            @(Resources.DataDictionary.Yes)
+        </Button>
+        <Button BootstrapColor="BootstrapColor.Danger"
+                IsWidth100="false"
+                Title="@(Resources.DataDictionary.No)"
+                OnCLick="OnNoClicked">
+            @(Resources.DataDictionary.No)
+        </Button>
+    </div>
+</ModalComponent>
+
+@code {
+    private ModalComponent? _modal;
+    [Parameter] public string ModalId { get; set; } = "exampleModal";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback OnYes { get; set; }
+    [Parameter] public EventCallback OnNo { get; set; }
+    [Parameter] public BootstrapColor Color { get; set; }
+    [Parameter] public string? Title { get; set; } = Resources.DataDictionary.QuestionSystem;
+
+    private async Task OnYesClicked()
+    {
+        await HideAsync();
+
+        if (OnYes.HasDelegate)
+        {
+            await OnYes.InvokeAsync(null);
+        }
+    }
+
+    private async Task OnNoClicked()
+    {
+        await HideAsync();
+
+        if (OnNo.HasDelegate)
+        {
+            await OnNo.InvokeAsync(null);
+        }
+    }
+
+    public async Task ShowAsync()
+    {
+        if (_modal != null)
+        {
+            await _modal.ShowAsync();
+        }
+    }
+
+    private async Task HideAsync()
+    {
+        if (_modal != null)
+        {
+            await _modal.HideAsync();
+        }
+    }
+
+}

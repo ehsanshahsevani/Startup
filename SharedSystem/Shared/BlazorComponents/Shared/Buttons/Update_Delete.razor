@@ -1,0 +1,8 @@
+<ButtonUpdateTable OnCLick="args => OnClickedUpdateButton.InvokeAsync(args)"/>
+|
+<ButtonDeleteTable OnCLick="args => OnClickedDeleteButton.InvokeAsync(args)"/>
+
+@code {
+    [Parameter] public EventCallback<MouseEventArgs> OnClickedUpdateButton { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> OnClickedDeleteButton { get; set; }
+}

@@ -1,0 +1,210 @@
+@inherits ComponentBaseMarketplaceFullCustom<PageSettingResponseViewModel, PageSettingRequestViewModel>
+
+@page "/page-setting/{Id?}"
+
+<PageTitle>
+    @(Resources.DataDictionary.PageSetting)
+</PageTitle>
+
+<PageDescription PageDescriptionModel="@(_pageDescription)" SubSystem="@(nameof(PageSetting))"/>
+
+<Card>
+    <CardHeader UpdateMode="string.IsNullOrEmpty(Model.Id) == false"/>
+    <CardBody>
+        <Form>
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Name))" IsRequired="true">
+                    @(Resources.DataDictionary.Name)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.Name" Id="@(nameof(Model.Name))"
+                                 Placeholder="@(Resources.DataDictionary.Name)"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="@nameof(Model.Link)" IsRequired="true">
+                    @(Resources.DataDictionary.Link)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.Link"
+                                 Id="@(nameof(Model.Link))"
+                                 Placeholder="@(Resources.DataDictionary.Link)"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="@nameof(Model.PageTitle)" IsRequired="true">
+                    @(Resources.DataDictionary.PageTitle)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.PageTitle"
+                                 Id="@(nameof(Model.PageTitle))"
+                                 Placeholder="@($"{Resources.Messages.ForSEO} - {Resources.DataDictionary.WebTitle}")"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText>
+                    @(Resources.DataDictionary.Category)
+                </LabelText>
+                <SelectCategory @bind-SelectedValue="@(Model.CategoryId)" IsRequired="true"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.FileWeb))">
+                    @(Resources.DataDictionary.FileWeb)
+                </LabelText>
+                <InputFileCustom FilesChanged="OnFileHandleWeb" Id="@(nameof(Model.FileWeb))"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.FileMobile))">
+                    @(Resources.DataDictionary.FileMobile)
+                </LabelText>
+                <InputFileCustom FilesChanged="OnFileHandleMobile" Id="@(nameof(Model.FileMobile))"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Alternative))">
+                    @(Resources.DataDictionary.Alternative)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.Alternative"
+                                 Id="@(nameof(Model.Alternative))"
+                                 Placeholder="@(Resources.Messages.ForSEO)"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="title-image">
+                    @(Resources.DataDictionary.ImageTitle)
+                </LabelText>
+                <InputTextCustom @bind-Value="@(Model.ImageTitle)"
+                                 Id="@(nameof(Model.ImageTitle))"
+                                 Placeholder="@(Resources.Messages.ForWaitMouseOnImage)"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="ReadTime">
+                    @(Resources.DataDictionary.ReadTime)
+                </LabelText>
+                <InputNumberCustom @bind-Value="@(Model.ReadTime)" Id="ReadTime"
+                                   Placeholder="@($"{Resources.DataDictionary.ReadTime} - {Resources.DataDictionary.Faq}")"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="order" Description="@(Resources.Messages.ForOrdering)">
+                    @(Resources.DataDictionary.Order)
+                </LabelText>
+                <InputNumberCustom @bind-Value="@(Model.Ordering)" Id="order"
+                                   Placeholder="@(Resources.Messages.ForOrdering)"/>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.IsActive)" Id="@(nameof(Model.IsActive))"/>
+                <LabelCheck For="@(nameof(Model.IsActive))">
+                    @(Resources.DataDictionary.IsActive)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.IsActiveInMobile)" Id="@(nameof(Model.IsActiveInMobile))"/>
+                <LabelCheck For="@(nameof(Model.IsActiveInMobile))">
+                    @(Resources.DataDictionary.IsActiveInMobile)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.IsActiveInWeb)" Id="@(nameof(Model.IsActiveInWeb))"/>
+                <LabelCheck For="@(nameof(Model.IsActiveInWeb))">
+                    @(Resources.DataDictionary.IsActiveInWeb)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.TargetIsBlank)" Id="@(nameof(Model.TargetIsBlank))"/>
+                <LabelCheck For="@(nameof(Model.TargetIsBlank))">
+                    @(Resources.DataDictionary.TargetIsBlank)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection OneRow="true">
+                <LabelText For="description">
+                    @(Resources.DataDictionary.Description)
+                </LabelText>
+                <TextAreaCustom @bind-Value="@(Model.Description)" Id="@(nameof(Model.Description))"
+                                Rows="3"></TextAreaCustom>
+            </FormControlSection>
+            <TagPageSetting TagsSelected="Model.Tags" OnSelectKey="UpdateModelTags"></TagPageSetting>
+        </Form>
+    </CardBody>
+    <CardFooter>
+        @if (string.IsNullOrEmpty(Model.Id) == true)
+        {
+            <ButtonCreate OnCLick="CreateAsync"/>
+        }
+        else
+        {
+            <ButtonSaveChanges OnCLick="() => _modalUpdateQuestion.ShowAsync(Model.Id)"/>
+            <ButtonCancel OnCLick="OffUpdateMode"/>
+        }
+    </CardFooter>
+</Card>
+
+<hr>
+
+<FormSearch OnSearch="textSearch => OnSearchAsync(textSearch)"/>
+
+<TableSection>
+    <Table>
+        <TableHead>
+            <TableRow IsActive="true">
+                <TableHeader>@(Resources.DataDictionary.Row)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.CreateDate)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Name)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.NameEN)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Category)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.PageTitle)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.FileWeb)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.FileMobile)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Order)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Opration)</TableHeader>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            @if (List is null)
+            {
+                <TableRow TableColor="BootstrapColor.Warning">
+                    <TableData Colspan="10">
+                        @(Resources.Messages.TextLoading)
+                    </TableData>
+                </TableRow>
+            }
+            else
+            {
+                for (int index = 0; index < List.Count; index++)
+                {
+                    PageSettingResponseViewModel item = List[index];
+
+                    var showIndex = index;
+
+                    <TableRow IsActive="item.IsActive">
+                        <TableData>@(showIndex + 1)</TableData>
+                        <TableData>@(item.CreateDateShamsi) | @(item.CreateTime)</TableData>
+                        <TableData>@(item.Name)</TableData>
+                        <TableData Data="@(item.CategoryDisplayName)"/>
+                        <TableData Data="@(item.PageTitle)"></TableData>
+                        <TableData>
+                            <FileThumbnailViewre Alternative="@(item.Alternative)"
+                                                 FileHasExist="item.FileWebHasExist"
+                                                 FileThumbnailHasExist="item.FileThumbnailWebHasExist"
+                                                 FileThumbnailUrl="@(item.FileThumbnailWebUrl)"
+                                                 FileUrl="@(item.FileWebUrl)"
+                                                 ImageTitle="@(item.ImageTitle)"/>
+                        </TableData>
+                        <TableData>
+                            <FileThumbnailViewre Alternative="@(item.Alternative)"
+                                                 FileHasExist="item.FileMobileHasExist"
+                                                 FileThumbnailHasExist="item.FileThumbnailMobileHasExist"
+                                                 FileThumbnailUrl="@(item.FileThumbnailMobileUrl)"
+                                                 FileUrl="@(item.FileMobileUrl)"
+                                                 ImageTitle="@(item.ImageTitle)"/>
+                        </TableData>
+                        <TableData>@(item.Ordering)</TableData>
+                        <TableData>
+                            <Update_Delete OnClickedDeleteButton="() => _modalDeleteQuestion!.ShowAsync(item.Id!)"
+                                           OnClickedUpdateButton="() => GoToPageAsync(MarketplaceRoutes.PageSetting(), item.Id!)"></Update_Delete>
+                        </TableData>
+                    </TableRow>
+                }
+            }
+        </TableBody>
+    </Table>
+    <PaginationSystem @ref="_paginationSystem" MetaData="_metaData" OnChangedMetaData="CallbackMetaData"/>
+</TableSection>
+
+<ModalLoading @ref="_loadingModal"/>
+<ModalDeleteQuestion @ref="_modalDeleteQuestion" OnDeleteConfirmed="DeleteAsync"/>
+<ModalUpdateQuestion @ref="_modalUpdateQuestion" OnUpdateConfirmed="UpdateAsync"/>
+<ModalQuestionDeleteAttachments @ref="_modalUpdateQuestionDeleteAttachments"
+                                OnDeleteAttachmentsConfirmed="DeleteImageAsync"/>

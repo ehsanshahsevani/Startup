@@ -1,0 +1,114 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Service\Advertising\**" />
+    <Compile Remove="Service\AI\**" />
+    <Compile Remove="Service\AppVersionHistories\**" />
+    <Compile Remove="Service\Client\**" />
+    <Compile Remove="Service\DecoCut\**" />
+    <Compile Remove="Service\FileSale\**" />
+    <Compile Remove="Service\Hospital\**" />
+    <Compile Remove="Service\Market\**" />
+    <Compile Remove="Service\Notifi\**" />
+    <Compile Remove="Service\PageSettings\**" />
+    <Compile Remove="Service\Permission\**" />
+    <Compile Remove="Service\RequestForRepairs\**" />
+    <Compile Remove="Service\State\**" />
+    <Compile Remove="Service\Technician\**" />
+    <Compile Remove="Service\Visualizer\**" />
+    <Compile Remove="Service\Web\**" />
+    <EmbeddedResource Remove="Service\Advertising\**" />
+    <EmbeddedResource Remove="Service\AI\**" />
+    <EmbeddedResource Remove="Service\AppVersionHistories\**" />
+    <EmbeddedResource Remove="Service\Client\**" />
+    <EmbeddedResource Remove="Service\DecoCut\**" />
+    <EmbeddedResource Remove="Service\FileSale\**" />
+    <EmbeddedResource Remove="Service\Hospital\**" />
+    <EmbeddedResource Remove="Service\Market\**" />
+    <EmbeddedResource Remove="Service\Notifi\**" />
+    <EmbeddedResource Remove="Service\PageSettings\**" />
+    <EmbeddedResource Remove="Service\Permission\**" />
+    <EmbeddedResource Remove="Service\RequestForRepairs\**" />
+    <EmbeddedResource Remove="Service\State\**" />
+    <EmbeddedResource Remove="Service\Technician\**" />
+    <EmbeddedResource Remove="Service\Visualizer\**" />
+    <EmbeddedResource Remove="Service\Web\**" />
+    <None Remove="Service\Advertising\**" />
+    <None Remove="Service\AI\**" />
+    <None Remove="Service\AppVersionHistories\**" />
+    <None Remove="Service\Client\**" />
+    <None Remove="Service\DecoCut\**" />
+    <None Remove="Service\FileSale\**" />
+    <None Remove="Service\Hospital\**" />
+    <None Remove="Service\Market\**" />
+    <None Remove="Service\Notifi\**" />
+    <None Remove="Service\PageSettings\**" />
+    <None Remove="Service\Permission\**" />
+    <None Remove="Service\RequestForRepairs\**" />
+    <None Remove="Service\State\**" />
+    <None Remove="Service\Technician\**" />
+    <None Remove="Service\Visualizer\**" />
+    <None Remove="Service\Web\**" />
+    <Compile Remove="Filters\FilterActions\ShopSignatureViewModelFilterAction.cs" />
+    <Compile Remove="Filters\FilterActions\CheckShopSignatureIdActionFilter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Service\AdvertisementService.cs" />
+    <Compile Remove="Service\Announcements\AnnouncementImagesService.cs" />
+    <Compile Remove="Service\Announcements\AnnouncementPromotionService.cs" />
+    <Compile Remove="Service\Announcements\AnnouncementService.cs" />
+    <Compile Remove="Service\Announcements\BlockListService.cs" />
+    <Compile Remove="Service\Announcements\CategoryService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_AttributeValueService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_FormInputService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_FormService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_InputDropdownService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_InputService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_TypeAttributeService.cs" />
+    <Compile Remove="Service\Announcements\FormBuilder\ANT_TypeService.cs" />
+    <Compile Remove="Service\Announcements\FormValueService.cs" />
+    <Compile Remove="Service\Announcements\PinAnnouncementService.cs" />
+    <Compile Remove="Service\Announcements\PromotionService.cs" />
+    <Compile Remove="Service\Announcements\RemoveAnnouncementService.cs" />
+    <Compile Remove="Service\Announcements\ReportAnnouncementService.cs" />
+    <Compile Remove="Service\Announcements\ReportService.cs" />
+    <Compile Remove="Service\Announcements\SettingAnnouncementService.cs" />
+    <Compile Remove="Service\Announcements\StatisticsServices.cs" />
+    <Compile Remove="Service\Announcements\UserChatService.cs" />
+    <Compile Remove="Service\Announcements\UserReportAnnouncementService.cs" />
+    <Compile Remove="Service\ContactService.cs" />
+    <Compile Remove="Service\DbInitializerService.cs" />
+    <Compile Remove="Service\DiscountCodeService.cs" />
+    <Compile Remove="Service\FooterAndSocialService.cs" />
+    <Compile Remove="Service\GatewayService.cs" />
+    <Compile Remove="Service\GuestContactSectionService.cs" />
+    <Compile Remove="Service\LanguageService.cs" />
+    <Compile Remove="Service\MetaTagsService.cs" />
+    <Compile Remove="Service\SocialNetworkService.cs" />
+    <Compile Remove="Service\ViewCounterService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SeedworkSystem\ControllerSeedworks\ControllerSeedworks.csproj" />
+    <ProjectReference Include="..\..\..\SeedworkSystem\InfrastructureSeedworks\InfrastructureSeedworks.csproj" />
+    <ProjectReference Include="..\..\..\SeedworkSystem\HttpServiceSeedworks\HttpServiceSeedworks.csproj" />
+    <ProjectReference Include="..\..\..\SharedSystem\Shared\JwtSettings\JwtSettings.csproj" />
+    <ProjectReference Include="..\..\..\SharedSystem\Shared\ViewModels\ViewModels.csproj" />
+    <ProjectReference Include="..\..\Core\Persistence\Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

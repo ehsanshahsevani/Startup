@@ -1,0 +1,38 @@
+@if (FileThumbnailHasExist == true)
+{
+    <a href="@(FileUrl)" target="_blank" class="file-thumbnail @(Class)">
+        <img src="@(FileThumbnailUrl)" width="@(ThumbnailSize)" title="@(ImageTitle)" alt="@(Alternative)" />
+    </a>
+}
+else if (FileHasExist == true)
+{
+    <a href="@FileUrl" target="_blank" class="file-thumbnail @(Class)">
+        <img src="@FileUrl" width="@(ThumbnailSize)" title="@(ImageTitle)" alt="@(Alternative)" />
+    </a>
+}
+else
+{
+    if (string.IsNullOrEmpty(ImageTitle) == false)
+    {
+        <div class="file-thumbnail text-data @(Class)" title="@(ImageTitle)">
+            @(ImageTitle)
+        </div>
+    }
+    else
+    {
+        <LabelEmpty BackgroundColor="BootstrapColor.Dark">
+            @(Resources.DataDictionary.NoSaved)
+        </LabelEmpty>
+    }
+}
+
+@code {
+    [Parameter, EditorRequired] public bool FileThumbnailHasExist { get; set; }
+    [Parameter, EditorRequired] public bool FileHasExist { get; set; }
+    [Parameter, EditorRequired] public string FileUrl { get; set; } = string.Empty;
+    [Parameter] public string FileThumbnailUrl { get; set; } = string.Empty;
+    [Parameter] public string ImageTitle { get; set; } = "تصویر";
+    [Parameter] public string Alternative { get; set; } = "بدون فایل";
+    [Parameter] public string Class { get; set; } = "";
+    [Parameter] public int ThumbnailSize { get; set; } = 50;
+}

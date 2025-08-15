@@ -1,0 +1,84 @@
+@if (Options is not null)
+{
+    <select id="@(Id)" @onchange="HandleChange" class="form-select fs-12px" aria-label="Dropdown select">
+        @if (ShowPlaceholderItem == true)
+        {
+            <option value="">
+                @(Resources.Messages.SelectItem)
+            </option>
+        }
+        
+        @if (SelectFirstItemIfCountOne == true && Options.Count == 1)
+        {
+            <option value="@(Options.First().ValueId)" selected>
+                @(Options.First().Value)
+            </option>
+        }
+        else
+        {
+            @foreach (var item in Options)
+            {
+                if (SelectedValue == item.ValueId)
+                {
+                    <option value="@item.ValueId" selected>@(item.Value)</option>
+                }
+                else
+                {
+                    <option value="@item.ValueId">@(item.Value)</option>
+                }
+            }
+        }
+    </select>
+}
+
+@code {
+    [Parameter] public string? SelectedValue { get; set; }
+    
+    [Parameter] public string? Id { get; set; }
+
+    [Parameter] public EventCallback<string> SelectedValueChanged { get; set; }
+
+    [Parameter] public List<UiSelectModel>? Options { get; set; }
+
+    [Parameter] public bool SelectFirstItemIfCountOne { get; set; }
+
+    [Parameter] public bool Disabled { get; set; }
+
+    [Parameter] public bool ShowPlaceholderItem { get; set; } = true;
+
+    public SelectCustom()
+    {
+        SelectedValue = null;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (Options is null)
+        {
+            throw new NullReferenceException(message: nameof(Options));
+        }
+        
+        if (SelectedValue is not null)
+        { 
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+        else
+        {
+            if (ShowPlaceholderItem == false)
+            {
+                SelectedValue = Options.First().ValueId;
+                await SelectedValueChanged.InvokeAsync(SelectedValue);
+            }
+        }
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        SelectedValue = e.Value?.ToString();
+
+        if (SelectedValueChanged.HasDelegate == true)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+    }
+}

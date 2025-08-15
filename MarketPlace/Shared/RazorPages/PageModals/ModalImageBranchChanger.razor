@@ -1,0 +1,161 @@
+@inject BranchService BranchService
+@inject RequestResultService RequestResultService
+
+<ModalComponent ModalId="@(ModalId)"
+                @ref="_modal" Title="@(Title)"
+                HasFooter="false"
+                HeaderBckgroundColor="@(Color)">
+    <Form>
+        <FormControlSection OneRow="true">
+            <LabelText For="file" Flag="false">
+                @(Resources.DataDictionary.Image)
+            </LabelText>
+            <InputFileCustom FilesChanged="OnFileHandle" Id="file"/>
+        </FormControlSection>
+        
+        @if (File is not null)
+        {
+            <FormControlSection OneRow="true" IsTextCenter="true">
+                <ImageViewer Image="File" IsResponsive="true"></ImageViewer>
+            </FormControlSection>
+        }
+    </Form>
+
+    <div class="modal-footer m-0 p-0">
+        <Button BootstrapColor="BootstrapColor.Warning"
+                IsOutLine="false"
+                IsWidth100="false"
+                Title="@(Resources.ButtonCaptions.SaveChanges)"
+                OnCLick="@(OnSubmitClicked)">
+            @(Resources.ButtonCaptions.Save)
+        </Button>
+        <Button BootstrapColor="BootstrapColor.Secondary"
+                IsOutLine="true"
+                IsWidth100="false"
+                Title="@(Resources.ButtonCaptions.Close)"
+                OnCLick="@(OnCloseClicked)">
+            @(Resources.ButtonCaptions.Close)
+        </Button>
+    </div>
+</ModalComponent>
+
+
+@code {
+    private ModalComponent? _modal;
+
+    public IFormFile? File { get; set; }
+    
+    public string? Id { get; set; }
+
+    [Parameter] public BootstrapColor Color { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string ModalId { get; set; } = "modal-update-image-branch";
+
+    [Parameter] public EventCallback<BranchResponseViewModel> OnSubmit { get; set; }
+
+    [Parameter] public string? Title { get; set; } = Resources.DataDictionary.SubmitForm;
+
+    private readonly List<UiSelectModel>? _valueSelectOptions;
+
+    public ModalImageBranchChanger()
+    {
+        _valueSelectOptions =
+        [
+            new UiSelectModel
+                (Resources.DataDictionary.Percent, nameof(ValueType.Percent)),
+
+            new UiSelectModel
+                (Resources.DataDictionary.Price, nameof(ValueType.Price))
+        ];
+    }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private async Task OnSubmitClicked()
+    {
+        var result = new FluentResults.Result();
+
+        if (File is null)
+        {
+            var errorMessage =
+                string.Format(
+                    Resources.Messages.RequiredError, Resources.DataDictionary.File);
+
+            result.WithError(errorMessage);
+        }
+        
+        RequestResultService.AddResult(result.ConvertToSampleResult());
+
+        if (result.IsSuccess == true)
+        {
+            var updateResult =
+                await BranchService.UpdateProfileAsync(Id, File);
+
+            RequestResultService.AddResult(updateResult);
+
+            if (updateResult.IsSuccess == true)
+            {
+                await OnSubmit.InvokeAsync(updateResult.Value);
+                
+                await HideAsync();
+            }
+        }
+    }
+
+    private void OnFileHandle(List<IFormFile>? list)
+    {
+        var result = new FluentResults.Result();
+
+        if (list is not null && list.Any() == true && list[0].Length != 0)
+        {
+            File = list[0];
+        }
+        else
+        {
+            File = null;
+            result.WithError(Resources.Messages.ErroZiroByteFile);
+        }
+
+        RequestResultService.AddResult(result.ConvertToSampleResult());
+    }
+
+    private async Task OnCloseClicked()
+    {
+        File = null;
+        
+        await HideAsync();
+
+        if (OnClose.HasDelegate)
+        {
+            await OnClose.InvokeAsync(null);
+        }
+    }
+
+    public async Task ShowAsync(string productId)
+    {
+        File = null;
+
+        if (string.IsNullOrEmpty(productId) == true)
+        {
+            throw new NullReferenceException(nameof(Id));
+        }
+
+        Id = productId;
+
+        if (_modal != null)
+        {
+            await _modal.ShowAsync();
+        }
+    }
+
+    private async Task HideAsync()
+    {
+        if (_modal != null)
+        {
+            await _modal.HideAsync();
+        }
+    }
+
+}

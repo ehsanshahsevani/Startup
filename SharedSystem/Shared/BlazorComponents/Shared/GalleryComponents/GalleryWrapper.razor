@@ -1,0 +1,9 @@
+<div class="d-flex justify-content-center overflow-auto gap-3 px-3 py-2"
+     style="scroll-snap-type: x mandatory; white-space: nowrap;">
+    @(ChildContent)
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

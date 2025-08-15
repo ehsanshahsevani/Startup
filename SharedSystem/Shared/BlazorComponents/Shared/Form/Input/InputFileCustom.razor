@@ -1,0 +1,53 @@
+<InputFile
+    class="form-control"
+    id="@(Id)"
+    placeholder="@(Placeholder)"
+    OnChange="HandleFileChange"
+    disabled="@(Disabled)"
+    multiple="@(AllowMultiple)"/>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Placeholder { get; set; }
+    
+    [Parameter] public bool Disabled { get; set; } = false;
+
+    [Parameter] public bool AllowMultiple { get; set; } = false;
+
+    [Parameter] public IReadOnlyList<IBrowserFile>? Files { get; set; }
+
+    [Parameter] public EventCallback<List<IFormFile>?> FilesChanged { get; set; }
+
+
+    private async Task HandleFileChange(InputFileChangeEventArgs e)
+    {
+        // گرفتن لیست فایل‌ها
+        var files = e.GetMultipleFiles();
+
+        // بررسی فایل‌ها
+        if (files is not null && files.Count > 0)
+        {
+            Files = files;
+
+            // احضار رخداد فایل‌ها (اگر نیاز است)
+            if (FilesChanged.HasDelegate)
+            {
+                var list = new List<IFormFile>();
+                
+                foreach (var browserFile in files)
+                {
+                    IFormFile file =  await Infrastructure.Utility.ConvertIBrowserFileToFormFileAsync(browserFile);
+                    
+                    list.Add(file);
+                }
+                
+                await FilesChanged.InvokeAsync(list);
+            }
+        }
+        else
+        {
+            await FilesChanged.InvokeAsync(new List<IFormFile>());
+        }
+    }
+
+}

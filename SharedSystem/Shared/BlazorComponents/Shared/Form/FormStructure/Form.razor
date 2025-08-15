@@ -1,0 +1,11 @@
+<form class="row row-cols-lg-@(RowColsOnDesktop) row-cols-md-1 row-cols-sm-1">
+    @(ChildContent)
+</form>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public int RowColsOnDesktop { get; set; } = 4;
+}

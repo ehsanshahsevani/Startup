@@ -1,0 +1,138 @@
+@using Infrastructure.IntropClasses
+
+@inject BootstrapService BootstrapService
+@inject RequestResultService RequestResultService
+
+@foreach (var toast in _toasts)
+{
+    @if (toast.Result.IsSuccess == true && toast.Result.Successes.Any())
+    {
+        <ToastBootstrap Id="@(toast.Id)"
+                        BackgroundColorBody="BootstrapColor.Success"
+                        ForgroundColorBody="BootstrapColor.Light"
+                        Title="@(Resources.DataDictionary.SystemMessage)">
+            <ul>
+                @foreach (var item in toast.Result.Successes)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+        </ToastBootstrap>
+    }
+    else if (!toast.Result.IsSuccess)
+    {
+        <ToastBootstrap Id="@(toast.Id)"
+                        BackgroundColorBody="BootstrapColor.Danger"
+                        ForgroundColorBody="BootstrapColor.Light"
+                        Title="@(Resources.DataDictionary.SystemMessage)">
+            <ul>
+                @if (toast.Result.Errors?.Any() == true)
+                {
+                    @foreach (var item in toast.Result.Errors)
+                    {
+                        <li>@item</li>
+                    }
+                }
+                else 
+                {
+                    <li>@Resources.Messages.SystemError</li>
+                }
+            </ul>
+        </ToastBootstrap>
+    }
+}
+
+
+@code {
+    private List<ResultPack> _toasts = new();
+
+    protected override void OnInitialized()
+    {
+        RequestResultService.OnAdded += RequestResultServiceOnAdded;
+    }
+
+    private void RequestResultServiceOnAdded(object? sender, ResultPack e)
+    {
+        _toasts.Add(e);
+        InvokeAsync(StateHasChanged);
+
+        _ = ShowAndRemoveAsync(e);
+    }
+
+    private async Task ShowAndRemoveAsync(ResultPack toast)
+    {
+        await Task.Delay(100);
+        await BootstrapService.ToastBootstrapShow(toast.Id);
+        await Task.Delay(5000);
+        _toasts.Remove(toast);
+        await InvokeAsync(StateHasChanged);
+    }
+}
+
+@* @using Infrastructure *@
+@* *@
+@* @inject RequestResultServive RequestResultService *@
+@* *@
+@* @inject BootstrapService BootstrapService *@
+@* *@
+@* @if (_current is not null) *@
+@* { *@
+@*     <ToastBootstrap Id="@_current.Id" *@
+@*                     BackgroundColorBody="@(_current.Result.IsSuccess ? BootstrapColor.Success : BootstrapColor.Danger)" *@
+@*                     ForgroundColorBody="BootstrapColor.Light"> *@
+@*         <ul> *@
+@*             @foreach (string item in _current.Result.IsSuccess *@
+@*                           ? _current.Result.Successes *@
+@*                           : _current.Result.Errors) *@
+@*             { *@
+@*                 <li>@item</li> *@
+@*             } *@
+@*         </ul> *@
+@*     </ToastBootstrap> *@
+@* } *@
+
+@* @code { *@
+@*     private Queue<ResultPack> _queue = new(); *@
+@*      *@
+@*     private ResultPack? _current; *@
+@*     private bool _shouldShow; *@
+@* *@
+@*     protected override void OnInitialized() *@
+@*     { *@
+@*         RequestResultService.OnAdded += RequestResultServiceOnOnAdded; *@
+@*     } *@
+@* *@
+@*     private void RequestResultServiceOnOnAdded(object? sender, ResultPack e) *@
+@*     { *@
+@*         _queue.Enqueue(e); *@
+@*          *@
+@*         if (_current is null) *@
+@*         { *@
+@*             ProcessNext(); *@
+@*         } *@
+@*     } *@
+@* *@
+@*     private void ProcessNext() *@
+@*     { *@
+@*         if (_queue.TryDequeue(out var next)) *@
+@*         { *@
+@*             _current = next; *@
+@*             _shouldShow = true; *@
+@*             InvokeAsync(StateHasChanged); *@
+@*         } *@
+@*     } *@
+@* *@
+@*     protected override async Task OnAfterRenderAsync(bool firstRender) *@
+@*     { *@
+@*         if (_shouldShow && _current is not null) *@
+@*         { *@
+@*             await Task.Delay(100); *@
+@*             await BootstrapService.ToastBootstrapShow(_current.Id); *@
+@*             _shouldShow = false; *@
+@*              *@
+@*             await Task.Delay(5000); *@
+@*             _current = null; *@
+@*             ProcessNext(); *@
+@*         } *@
+@*     } *@
+@* } *@

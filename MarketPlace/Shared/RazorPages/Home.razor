@@ -1,0 +1,280 @@
+﻿@page "/"
+
+<PageTitle>پنل مدیریت طلاسوت</PageTitle>
+
+<div class="container mt-4">
+    <!-- عنوان اصلی -->
+    <h2 class="mb-4 text-center">داشبورد مدیریت طلاسوت</h2>
+
+    <div class="row">
+        <!-- کارت‌های آماری -->
+        <div class="col-md-6">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <h6 class="card-title d-flex align-items-center mb-3">
+                                <i class="bi bi-shop ms-2"></i>
+                                فروشگاه‌ها
+                            </h6>
+                            <table class="table table-sm table-borderless text-white mb-0">
+                                <tr>
+                                    <td>کل:</td>
+                                    <td class="text-end fw-bold">120</td>
+                                </tr>
+                                <tr>
+                                    <td>فعال:</td>
+                                    <td class="text-end">98</td>
+                                </tr>
+                                <tr>
+                                    <td>غیرفعال:</td>
+                                    <td class="text-end">22</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <h6 class="card-title d-flex align-items-center mb-3">
+                                <i class="bi bi-box-seam ms-2"></i>
+                                محصولات
+                            </h6>
+                            <table class="table table-sm table-borderless text-white mb-0">
+                                <tr>
+                                    <td>کل:</td>
+                                    <td class="text-end fw-bold">3478</td>
+                                </tr>
+                                <tr>
+                                    <td>تایید شده:</td>
+                                    <td class="text-end">2890</td>
+                                </tr>
+                                <tr>
+                                    <td>در انتظار:</td>
+                                    <td class="text-end">588</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card text-white bg-info">
+                        <div class="card-body">
+                            <h6 class="card-title d-flex align-items-center mb-3">
+                                <i class="bi bi-calendar-check ms-2"></i>
+                                آمار امروز
+                            </h6>
+                            <table class="table table-sm table-borderless text-white mb-0">
+                                <tr>
+                                    <td>بازدید:</td>
+                                    <td class="text-end fw-bold">1245</td>
+                                </tr>
+                                <tr>
+                                    <td>سفارش:</td>
+                                    <td class="text-end">56</td>
+                                </tr>
+                                <tr>
+                                    <td>درآمد:</td>
+                                    <td class="text-end">2.4M</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <h6 class="card-title d-flex align-items-center mb-3">
+                                <i class="bi bi-cart-check ms-2"></i>
+                                سفارشات
+                            </h6>
+                            <table class="table table-sm table-borderless text-white mb-0">
+                                <tr>
+                                    <td>کل:</td>
+                                    <td class="text-end fw-bold">892</td>
+                                </tr>
+                                <tr>
+                                    <td>تحویل شده:</td>
+                                    <td class="text-end">754</td>
+                                </tr>
+                                <tr>
+                                    <td>در حال ارسال:</td>
+                                    <td class="text-end">138</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <h6 class="card-title d-flex align-items-center mb-3">
+                                <i class="bi bi-clock-history ms-2"></i>
+                                در انتظار تایید
+                            </h6>
+                            <table class="table table-sm table-borderless text-white mb-0">
+                                <tr>
+                                    <td>فروشگاه:</td>
+                                    <td class="text-end fw-bold">8</td>
+                                </tr>
+                                <tr>
+                                    <td>محصول:</td>
+                                    <td class="text-end">47</td>
+                                </tr>
+                                <tr>
+                                    <td>نظرات:</td>
+                                    <td class="text-end">126</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card text-white bg-secondary">
+                        <div class="card-body">
+                            <h6 class="card-title d-flex align-items-center mb-3">
+                                <i class="bi bi-people ms-2"></i>
+                                کاربران
+                            </h6>
+                            <table class="table table-sm table-borderless text-white mb-0">
+                                <tr>
+                                    <td>کل:</td>
+                                    <td class="text-end fw-bold">4521</td>
+                                </tr>
+                                <tr>
+                                    <td>فعال:</td>
+                                    <td class="text-end">3892</td>
+                                </tr>
+                                <tr>
+                                    <td>جدید امروز:</td>
+                                    <td class="text-end">34</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش نمودار -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-light">
+                    <h6 class="my-2">تحلیل فروش بر اساس دسته‌بندی‌ها</h6>
+                </div>
+                <div class="card-body h-100">
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">گزارش فعالیت کاربران</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">کاربر</th>
+                        <th scope="col">نوع فعالیت</th>
+                        <th scope="col">تاریخ و ساعت</th>
+                        <th scope="col">آی‌پی</th>
+                        <th scope="col">مرورگر</th>
+                        <th scope="col">وضعیت</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>علی محمدی</td>
+                        <td>ورود</td>
+                        <td>1402/09/20 14:30</td>
+                        <td>192.168.1.100</td>
+                        <td>Chrome 120.0</td>
+                        <td><span class="badge bg-success">موفق</span></td>
+                    </tr>
+                    <tr>
+                        <td>مریم احمدی</td>
+                        <td>خروج</td>
+                        <td>1402/09/20 14:25</td>
+                        <td>192.168.1.101</td>
+                        <td>Firefox 120.0</td>
+                        <td><span class="badge bg-primary">عادی</span></td>
+                    </tr>
+                    <tr>
+                        <td>رضا کریمی</td>
+                        <td>ورود</td>
+                        <td>1402/09/20 14:15</td>
+                        <td>192.168.1.102</td>
+                        <td>Safari 17.0</td>
+                        <td><span class="badge bg-danger">ناموفق</span></td>
+                    </tr>
+                    <tr>
+                        <td>سارا رضایی</td>
+                        <td>ورود</td>
+                        <td>1402/09/20 14:10</td>
+                        <td>192.168.1.103</td>
+                        <td>Edge 120.0</td>
+                        <td><span class="badge bg-success">موفق</span></td>
+                    </tr>
+                    <tr>
+                        <td>حسین محمودی</td>
+                        <td>خروج</td>
+                        <td>1402/09/20 14:05</td>
+                        <td>192.168.1.104</td>
+                        <td>Chrome 120.0</td>
+                        <td><span class="badge bg-primary">عادی</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">آمار دسته‌بندی‌های</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">نام دسته‌بندی</th>
+                        <th scope="col" class="text-success">محصولات فعال</th>
+                        <th scope="col" class="text-warning">محصولات غیرفعال</th>
+                        <th scope="col" class="text-danger">محصولات حذف شده</th>
+                        <th scope="col" class="text-primary">کل محصولات</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var category in SortedCategories)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td class="text-success">@category.ActiveCount</td>
+                            <td class="text-warning">@category.InactiveCount</td>
+                            <td class="text-danger">@category.DeletedCount</td>
+                            <td class="text-primary">@category.TotalCount</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

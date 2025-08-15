@@ -1,0 +1,14 @@
+Add Migration:
+dotnet ef migrations add --project AttachmentManager/Core/Persistence/Persistence.csproj --startup-project AttachmentManager/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug <NameMigration> --output-dir Migrations
+
+Update Database:
+dotnet ef database update --project AttachmentManager/Core/Persistence/Persistence.csproj --startup-project AttachmentManager/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug
+
+Remove Migration:
+dotnet ef migrations remove --project AttachmentManager/Core/Persistence/Persistence.csproj --startup-project AttachmentManager/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug --force
+
+dotnet ef migrations add --project AttachmentManager/Core/Persistence/Persistence.csproj --startup-project AttachmentManager/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug initial --output-dir Migrations
+
+MarcketPlace
+AttachmentManager
+ProjectManager

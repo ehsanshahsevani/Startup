@@ -1,0 +1,60 @@
+@page "/tala-sut-settings"
+
+@if (TalaSootSettingsRequestViewModel is not null)
+{
+    <PageTitle>
+        @(Resources.DataDictionary.RoleGold)
+    </PageTitle>
+
+    <PageDescription PageDescriptionModel="@(_pageDescription)" SubSystem="@(nameof(RoleGold))"/>
+
+    <Card>
+        <CardHeader UpdateMode="string.IsNullOrEmpty(TalaSootSettingsRequestViewModel.Id) == false"/>
+        <CardBody>
+            <Form>
+                <FormControlSection IsCheckBoxSection="true">
+                    <InputCheckBoxCustom @bind-Value="@(TalaSootSettingsRequestViewModel.BuyFromTheStore)"
+                                         Id="@(nameof(TalaSootSettingsRequestViewModel.BuyFromTheStore))"/>
+                    <LabelCheck For="@(nameof(TalaSootSettingsRequestViewModel.BuyFromTheStore))">
+                        @(Resources.DataDictionary.BuyFromTheStore)
+                    </LabelCheck>
+                </FormControlSection>
+                <FormControlSection IsCheckBoxSection="true">
+                    <InputCheckBoxCustom @bind-Value="@(TalaSootSettingsRequestViewModel.ClosingSaleAndPurchaseMoltenGold)"
+                                         Id="@(nameof(TalaSootSettingsRequestViewModel.ClosingSaleAndPurchaseMoltenGold))"/>
+                    <LabelCheck For="@(nameof(TalaSootSettingsRequestViewModel.ClosingSaleAndPurchaseMoltenGold))">
+                        @(Resources.DataDictionary.ClosingSaleAndPurchaseMoltenGold)
+                    </LabelCheck>
+                </FormControlSection>
+                <FormControlSection IsCheckBoxSection="true">
+                    <InputCheckBoxCustom @bind-Value="@(TalaSootSettingsRequestViewModel.SendGoldDeliveryRequest)"
+                                         Id="@(nameof(TalaSootSettingsRequestViewModel.SendGoldDeliveryRequest))"/>
+                    <LabelCheck For="@(nameof(TalaSootSettingsRequestViewModel.SendGoldDeliveryRequest))">
+                        @(Resources.DataDictionary.SendGoldDeliveryRequest)
+                    </LabelCheck>
+                </FormControlSection>
+                <FormControlSection IsCheckBoxSection="true">
+                    <InputCheckBoxCustom @bind-Value="@(TalaSootSettingsRequestViewModel.WithdrawalAndDepositFromWallet)"
+                                         Id="@(nameof(TalaSootSettingsRequestViewModel.WithdrawalAndDepositFromWallet))"/>
+                    <LabelCheck For="@(nameof(TalaSootSettingsRequestViewModel.WithdrawalAndDepositFromWallet))">
+                        @(Resources.DataDictionary.WithdrawalAndDepositFromWallet)
+                    </LabelCheck>
+                </FormControlSection>
+                <FormControlSection IsCheckBoxSection="true">
+                    <InputCheckBoxCustom @bind-Value="@(TalaSootSettingsRequestViewModel.WithdrawalFromWallet)"
+                                         Id="@(nameof(TalaSootSettingsRequestViewModel.WithdrawalFromWallet))"/>
+                    <LabelCheck For="@(nameof(TalaSootSettingsRequestViewModel.WithdrawalFromWallet))">
+                        @(Resources.DataDictionary.WithdrawalFromWallet)
+                    </LabelCheck>
+                </FormControlSection>
+            </Form>
+        </CardBody>
+        <CardFooter>
+            <ButtonSaveChanges 
+                OnCLick="@(() => _modalUpdateQuestion!.ShowAsync(TalaSootSettingsRequestViewModel.Id!))"/>
+        </CardFooter>
+    </Card>
+}
+
+<ModalUpdateQuestion @ref="_modalUpdateQuestion" OnUpdateConfirmed="UpdateAsync"/>
+<ModalLoading @ref="_loadingModal"/>

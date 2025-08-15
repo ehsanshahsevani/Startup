@@ -1,0 +1,203 @@
+@inherits ComponentBaseMarketplaceFullCustom<BranchResponseViewModel, BranchRequestViewModel>
+
+@page "/branch/{Id?}"
+
+<PageTitle>
+    @(Resources.DataDictionary.Branch)
+</PageTitle>
+
+<PageDescription PageDescriptionModel="@(_pageDescription)" SubSystem="@(nameof(Branch))"/>
+
+<Card>
+    <CardHeader UpdateMode="string.IsNullOrEmpty(Model.Id) == false"/>
+    <CardBody>
+        <Form>
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.ProvinceId))" IsRequired="true">
+                    @(Resources.DataDictionary.Province)
+                </LabelText>
+                <SelectProvince @bind-SelectedValue="Model.ProvinceId" Id="@(nameof(Model.ProvinceId))"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.CityId))" IsRequired="true">
+                    @(Resources.DataDictionary.City)
+                </LabelText>
+                <SelectCity @bind-SelectedValue="Model.CityId"
+                            ProvinceId="@(Model.ProvinceId)"
+                            Id="@(nameof(Model.CityId))"/>
+            </FormControlSection>
+            
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Name))" IsRequired="true">
+                    @(Resources.DataDictionary.Name)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.Name" Id="@(nameof(Model.Name))"
+                                 Placeholder="@(Resources.DataDictionary.Name)"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Phone))" IsRequired="true">
+                    @(Resources.DataDictionary.Phone)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.Phone" Id="@(nameof(Model.Phone))"
+                                 Placeholder="@(Resources.DataDictionary.Phone)"/>
+            </FormControlSection>
+
+            <FormControlSection Hidden="IsEditMode == true">
+                <LabelText For="@(nameof(Model.FileUpload))" IsRequired="true">
+                    @(Resources.DataDictionary.FileMobile)
+                </LabelText>
+                <InputFileCustom FilesChanged="OnFileHandle" Id="@(nameof(Model.FileUpload))"/>
+            </FormControlSection>
+            
+            <HeaderLine Header="@(Resources.DataDictionary.WorkTimeSettings)" IconClass="bi bi-calendar-week"/>
+            
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.FromDayOfWeek))" IsRequired="true">
+                    @(Resources.DataDictionary.FromDayOfWeek)
+                </LabelText>
+                <SelectDayInWeek @bind-SelectedValue="Model.FromDayOfWeek" Id="@(nameof(Model.FromDayOfWeek))"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.ToDayOfWeek))" IsRequired="true">
+                    @(Resources.DataDictionary.ToDayOfWeek)
+                </LabelText>
+                <SelectDayInWeek @bind-SelectedValue="Model.ToDayOfWeek" Id="@(nameof(Model.ToDayOfWeek))"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.FromTimeInDay))" IsRequired="true">
+                    @(Resources.DataDictionary.FromTimeInDay)
+                </LabelText>
+                <SelectTimeInDay @bind-SelectedValue="Model.FromTimeInDay" Id="@(nameof(Model.FromTimeInDay))"/>
+            </FormControlSection>
+            
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.ToTimeInDay))" IsRequired="true">
+                    @(Resources.DataDictionary.ToTimeInDay)
+                </LabelText>
+                <SelectTimeInDay @bind-SelectedValue="Model.ToTimeInDay" Id="@(nameof(Model.ToTimeInDay))"/>
+            </FormControlSection>
+            
+            <FormControlSection OneRow="true">
+                <LabelText For="description" IsRequired="true">
+                    @(Resources.DataDictionary.AddressDetail)
+                </LabelText>
+                <TextAreaCustom @bind-Value="@(Model.Address)" Id="@(nameof(Model.Address))"
+                                Rows="3"></TextAreaCustom>
+            </FormControlSection>
+            
+            <FormControlSection>
+                <LabelText For="order" Description="@(Resources.Messages.ForOrdering)">
+                    @(Resources.DataDictionary.Order)
+                </LabelText>
+                <InputNumberCustom @bind-Value="@(Model.Ordering)" Id="order"
+                                   Placeholder="@(Resources.Messages.ForOrdering)"/>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.IsActive)" Id="@(nameof(Model.IsActive))"/>
+                <LabelCheck For="@(nameof(Model.IsActive))">
+                    @(Resources.DataDictionary.IsActive)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection OneRow="true">
+                <LabelText For="description">
+                    @(Resources.DataDictionary.Description)
+                </LabelText>
+                <TextAreaCustom @bind-Value="@(Model.Description)"
+                                Id="@(nameof(Model.Description))"
+                                Rows="3"/>
+            </FormControlSection>
+        </Form>
+    </CardBody>
+    <CardFooter>
+        @if (string.IsNullOrEmpty(Model.Id) == true)
+        {
+            <ButtonCreate OnCLick="@(CreateAsync)"/>
+        }
+        else
+        {
+            <ButtonSaveChanges OnCLick="@(() => _modalUpdateQuestion!.ShowAsync(Model.Id))"/>
+            <ButtonCancel OnCLick="@(OffUpdateMode)"/>
+            @:|
+            <DropdownMenu ButtonColor="BootstrapColor.Secondary">
+                <DropdownMenuItem IsDivider="true"/>
+                <DropdownMenuItem OnClick="@(() => _modalImageBranchChanger!.ShowAsync(Model.Id!))">
+                    @(Resources.DataDictionary.ChangeProfile)
+                </DropdownMenuItem>
+            </DropdownMenu>
+        }
+    </CardFooter>
+</Card>
+
+<hr>
+
+<FormSearch OnSearch="textSearch => OnSearchAsync(textSearch)"/>
+
+<TableSection>
+    <Table>
+        <TableHead>
+            <TableRow IsActive="true">
+                <TableHeader>@(Resources.DataDictionary.Row)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Image)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.CreateDate)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Name)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.WorkingDay)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Order)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Opration)</TableHeader>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            @if (List is null)
+            {
+                <TableRow TableColor="BootstrapColor.Warning">
+                    <TableData Colspan="10">
+                        @(Resources.Messages.TextLoading)
+                    </TableData>
+                </TableRow>
+            }
+            else
+            {
+                for (int index = 0; index < List.Count; index++)
+                {
+                    BranchResponseViewModel item = List[index];
+
+                    var showIndex = index;
+
+                    <TableRow IsActive="item.IsActive">
+                        <TableData>@(showIndex + 1)</TableData>
+                        <TableData>
+                            <FileThumbnailViewre Alternative="@(item.Alternative)"
+                                                 FileHasExist="item.FileHasExist"
+                                                 FileThumbnailHasExist="item.FileThumbnailHasExist"
+                                                 FileThumbnailUrl="@(item.FileThumbnailUrl)"
+                                                 FileUrl="@(item.FileUrl)"
+                                                 ImageTitle="@(item.ImageTitle)"/>
+                        </TableData>
+                        <TableData>@(item.CreateDateShamsi) | @(item.CreateTime)</TableData>
+                        <TableData Title="@($"{item.ProvinceDisplayName} {item.CityDisplayName}")">@(item.Name)</TableData>
+                        <TableData Title="@(item.Address)" Data="@($"از {int.Parse(item.FromDayOfWeek).ChangeNumberWeekToNameWeekShamsi()} تا {int.Parse(item.ToDayOfWeek).ChangeNumberWeekToNameWeekShamsi()} - ساعت {item.FromTimeInDay} تا {item.ToTimeInDay}")"/>
+                        <TableData>@(item.Ordering)</TableData>
+                        <TableData>
+                            <Update_Delete OnClickedDeleteButton="() => _modalDeleteQuestion!.ShowAsync(item.Id!)"
+                                           OnClickedUpdateButton="() => GoToPageAsync(MarketplaceRoutes.Branch(), item.Id!)"/>
+                        </TableData>
+                    </TableRow>
+                }
+            }
+        </TableBody>
+    </Table>
+    <PaginationSystem @ref="_paginationSystem"
+                      MetaData="_metaData"
+                      OnChangedMetaData="CallbackMetaData"/>
+</TableSection>
+
+<ModalLoading @ref="_loadingModal"/>
+
+<ModalDeleteQuestion @ref="_modalDeleteQuestion" OnDeleteConfirmed="DeleteAsync"/>
+
+<ModalUpdateQuestion @ref="_modalUpdateQuestion" OnUpdateConfirmed="UpdateAsync"/>
+
+<ModalImageBranchChanger @ref="_modalImageBranchChanger" OnSubmit="@(UpdateRecordInTable)"/>

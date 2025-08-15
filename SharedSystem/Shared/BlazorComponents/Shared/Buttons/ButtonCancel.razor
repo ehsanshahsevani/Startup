@@ -1,0 +1,14 @@
+<Button IsSmall="true"
+        IsOutLine="true"
+        IsWidth100="false"
+        BootstrapColor="BootstrapColor.Danger"
+        title="@(Resources.ButtonCaptions.Cancel)"
+        OnCLick="args => OnCLick.InvokeAsync(args)">
+    <i class="bi bi-x-circle"></i>
+    @(Resources.ButtonCaptions.Cancel)
+</Button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCLick { get; set; }
+}

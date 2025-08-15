@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+@if (string.IsNullOrEmpty(_resolvedImageSource) == false)
+{
+    <div class="text-center" style="scroll-snap-align: center;">
+        <img src="@(_resolvedImageSource)"
+             alt="@(Title)"
+             title="@(Title)"
+             class="img-fluid"
+             style="width: 150px; height: 100px; border-radius: 2rem; object-fit: cover; border: 1px solid #ccc;" />
+        <div class="mt-1 text-muted">@(Title)</div>
+    </div>
+}
+else
+{
+    return;
+}
+
+@code {
+    [Parameter] public string? ImageUrl { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public IFormFile? File { get; set; }
+
+    private string? _resolvedImageSource = null;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if (File is not null)
+        {
+            _resolvedImageSource = await File.ConvertToBase64Async();
+        }
+        else if (string.IsNullOrEmpty(ImageUrl) == false)
+        {
+            _resolvedImageSource = ImageUrl;
+        }
+    }
+}

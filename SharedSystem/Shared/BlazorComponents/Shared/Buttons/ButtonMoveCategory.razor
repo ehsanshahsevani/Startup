@@ -1,0 +1,14 @@
+<Button IsSmall="true"
+        IsOutLine="false"
+        IsWidth100="false"
+        BootstrapColor="BootstrapColor.Link"
+        title="@(Resources.ButtonCaptions.MoveCategory)"
+        OnCLick="args => OnCLick.InvokeAsync(args)">
+    <i class="bi bi-arrows-move"></i>
+    @(Resources.ButtonCaptions.MoveCategory)
+</Button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCLick { get; set; }
+}

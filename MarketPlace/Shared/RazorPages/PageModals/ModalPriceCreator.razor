@@ -1,0 +1,175 @@
+@inject RequestResultService RequestResultService
+@inject ProductHistoryService ProductHistoryService
+
+<ModalComponent ModalId="@(ModalId)"
+                @ref="_modal" Title="@(Title)"
+                HasFooter="false"
+                HeaderBckgroundColor="@(Color)">
+    <Form>
+            <HeaderLine Header="@(Resources.DataDictionary.QuantityAndHistory)" IconClass="bi bi-inboxes"/>
+
+            <FormControlSection OneRow="true">
+                <LabelText For="@nameof(Model.PurchasePrice)"
+                           IsRequired="@(Model.HasRequestForCheckPrice == false)"
+                           Flag="@(Model.HasRequestForCheckPrice == false)">
+                    @(Resources.DataDictionary.PurchasePrice) @(Model.PurchasePrice.SeparateThousands())
+                </LabelText>
+                <InputNumberCustom Id="@(nameof(Model.PurchasePrice))"
+                                   @bind-Value="@(Model.PurchasePrice)"
+                                   Disabled="Model.HasRequestForCheckPrice"/>
+            </FormControlSection>
+
+            <FormControlSection OneRow="true">
+                <LabelText For="@nameof(Model.SellingPrice)"
+                           IsRequired="@(Model.HasRequestForCheckPrice == false)"
+                           Flag="@(Model.HasRequestForCheckPrice == false)">
+                    @(Resources.DataDictionary.SellingPrice) @(Model.SellingPrice.SeparateThousands())
+                </LabelText>
+                <InputNumberCustom Id="@(nameof(Model.SellingPrice))"
+                                   @bind-Value="@(Model.SellingPrice)"
+                                   Disabled="Model.HasRequestForCheckPrice"/>
+            </FormControlSection>
+
+            <FormControlSection OneRow="true">
+                <LabelText For="@nameof(Model.InitialCount)"
+                           IsRequired="@(Model.HasRequestForCheckPrice == false)"
+                           Flag="@(Model.HasRequestForCheckPrice == false)">
+                    @(Resources.DataDictionary.InitialCount) @(Model.InitialCount.SeparateThousands())
+                </LabelText>
+                <InputNumberCustom Id="@(nameof(Model.InitialCount))"
+                                   @bind-Value="@(Model.InitialCount)"
+                                   Disabled="Model.HasRequestForCheckPrice"/>
+            </FormControlSection>
+
+            <FormControlSection OneRow="true">
+                <LabelText For="@nameof(Model.CurrentCount)"
+                           IsRequired="@(Model.HasRequestForCheckPrice == false)"
+                           Flag="@(Model.HasRequestForCheckPrice == false)">
+                    @(Resources.DataDictionary.CurrentCount) @(Model.CurrentCount.SeparateThousands())
+                </LabelText>
+                <InputNumberCustom Id="@(nameof(Model.CurrentCount))"
+                                   @bind-Value="@(Model.CurrentCount)"
+                                   Disabled="Model.HasRequestForCheckPrice"/>
+            </FormControlSection>
+            
+    </Form>
+
+    <div class="modal-footer m-0 p-0">
+        <Button BootstrapColor="BootstrapColor.Primary"
+                IsOutLine="true"
+                IsWidth100="false"
+                Title="@(Resources.ButtonCaptions.Save)"
+                OnCLick="OnSubmitClicked">
+            @(Resources.ButtonCaptions.Save)
+        </Button>
+        <Button BootstrapColor="BootstrapColor.Secondary"
+                IsOutLine="true"
+                IsWidth100="false"
+                Title="@(Resources.ButtonCaptions.Close)"
+                OnCLick="OnCloseClicked">
+            @(Resources.ButtonCaptions.Close)
+        </Button>
+    </div>
+</ModalComponent>
+
+
+@code {
+    private ModalComponent? _modal;
+
+    public ProductHistoryRequestViewModel Model { get; set; }
+
+    [Parameter]
+    public string ProductId { get; set; }
+    
+    [Parameter] public BootstrapColor Color { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string ModalId { get; set; } = "modal-price-creator";
+
+    [Parameter]
+    public EventCallback<ProductResponseViewModel> OnSubmit { get; set; }
+    
+    [Parameter] public string? Title { get; set; } = Resources.DataDictionary.SubmitForm;
+
+    private readonly List<UiSelectModel>? _valueSelectOptions;
+
+    public ModalPriceCreator()
+    {
+        Model = new ProductHistoryRequestViewModel()
+        {
+            HasRequestForCheckPrice = false
+        };
+
+        _valueSelectOptions =
+        [
+            new UiSelectModel
+                (Resources.DataDictionary.Percent, nameof(ValueType.Percent)),
+            new UiSelectModel
+                (Resources.DataDictionary.Price, nameof(ValueType.Price))
+        ];
+    }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private async Task OnSubmitClicked()
+    {
+        Model.ProductId = ProductId;
+        
+        var resultValidate = Model.Validate();
+        
+        RequestResultService.AddResult(resultValidate);
+        
+        if (resultValidate.IsSuccess == true)
+        {
+            var result = 
+                await ProductHistoryService.CreateAsync(Model);
+
+            RequestResultService.AddResult(result);
+            
+            if (result.IsSuccess == true)
+            {
+                if (OnSubmit.HasDelegate)
+                {
+                    await OnSubmit.InvokeAsync(result.Value);
+                    Model = new ProductHistoryRequestViewModel();
+                }
+
+                await HideAsync();
+            }
+        }
+    }
+
+    private async Task OnCloseClicked()
+    {
+        await HideAsync();
+
+        if (OnClose.HasDelegate)
+        {
+            await OnClose.InvokeAsync(null);
+        }
+    }
+
+    public async Task ShowAsync(string productId)
+    {
+        if (string.IsNullOrEmpty(productId) == true)
+        {
+            throw new NullReferenceException(nameof(ProductId));
+        }
+        
+        ProductId = productId;
+        
+        if (_modal != null)
+        {
+            await _modal.ShowAsync();
+        }
+    }
+
+    private async Task HideAsync()
+    {
+        if (_modal != null)
+        {
+            await _modal.HideAsync();
+        }
+    }
+}

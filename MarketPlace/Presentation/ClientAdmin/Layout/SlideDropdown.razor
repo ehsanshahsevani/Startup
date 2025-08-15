@@ -1,0 +1,36 @@
+@inject NavigationManager NavigationManager
+
+<div class="nav-item dropdown px-3">
+    <a class="nav-link px-1 border-3 border-bottom @(_isOpen == true ? "border-yellow-talasoot" : "")" style="cursor: pointer" @onclick="ToggleDropdown">
+        <span class="me-1">
+            <i class="@(IconClass)"></i>
+            @(Title)
+        </span>
+    </a>
+
+    <div class="@(DropdownClass)" style="overflow: hidden; transition: max-height 0.3s ease;">
+        <ul class="fs-6 bg-transparent dropdown-menu show position-static w-auto border-0 rounded-0 shadow-none">
+            @(ChildContent)
+        </ul>
+    </div>
+</div>
+
+@code {
+    private bool _isOpen = false;
+
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string IconClass { get; set; } = "bi bi-list";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // if (true)
+        // {
+        //     _isOpen = true;
+        // }
+    }
+
+    private void ToggleDropdown() => _isOpen = !_isOpen;
+
+    private string DropdownClass => _isOpen ? "dropdown-slide-open" : "dropdown-slide-closed";
+}

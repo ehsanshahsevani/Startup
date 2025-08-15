@@ -1,0 +1,140 @@
+@inject CityService CityService
+@inject RequestResultService RequestResultService
+
+<select
+    class="form-select fs-12px"
+    @onchange="HandleChange"
+    disabled="@(_disabled)"
+    aria-label="Dropdown select"
+    id="@(Id)">
+    <option value="">@(Placeholder)</option>
+    @if (List is not null)
+    {
+        @foreach (var option in List)
+        {
+            @if (option.ValueId == SelectedValue)
+            {
+                <option value="@(option.ValueId)" selected="selected">
+                    @(option.Value)
+                </option>
+            }
+            else
+            {
+                <option value="@(option.ValueId)">
+                    @(option.Value)
+                </option>
+            }
+        }
+    }
+</select>
+
+@code {
+    [Parameter] public string? SelectedValue { get; set; }
+    [Parameter] public string? Id { get; set; }
+
+    [Parameter] public EventCallback<string> SelectedValueChanged { get; set; }
+
+    private List<UiSelectModel>? List { get; set; }
+
+    [Parameter] public string Placeholder { get; set; } = "انتخاب کنید";
+
+    private string? _oldProvinceId = null;
+
+    private bool _disabled = false;
+    
+    [Parameter] public string? ProvinceId { get; set; }
+
+    public SelectCity()
+    {
+        List = new List<UiSelectModel>();
+        SelectedValue = null;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(ProvinceId) == false)
+        {
+            _oldProvinceId = ProvinceId;
+
+            await SetListAsync(_oldProvinceId);
+
+            if (SelectedValueChanged.HasDelegate && SelectedValue is not null)
+            {
+                await SelectedValueChanged.InvokeAsync(SelectedValue);
+            }
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_oldProvinceId != ProvinceId)
+        {
+            SelectedValue = null;
+
+            _oldProvinceId = ProvinceId;
+
+            await ProvinceIdChangedAsync(ProvinceId);
+        }
+    }
+
+    private async Task ProvinceIdChangedAsync(string? provinceId)
+    {
+        if (string.IsNullOrEmpty(provinceId) == false)
+        {
+            await SetListAsync(provinceId);
+        }
+        else
+        {
+            List = new List<UiSelectModel>();
+
+            if (SelectedValueChanged.HasDelegate)
+            {
+                await SelectedValueChanged.InvokeAsync(SelectedValue);
+            }
+        }
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        SelectedValue = e.Value?.ToString();
+
+        if (SelectedValueChanged.HasDelegate)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+    }
+
+    private async Task SetListAsync(string provinceId)
+    {
+        SelectedValue = null;
+        
+        var backUpPlaceholder = Placeholder;
+        Placeholder = "درحال دریافت اطلاعات ...";
+
+        StateHasChanged();
+
+        var result =
+            await CityService.GetDropDownDataAsync(provinceId);
+
+        if (result.IsSuccess == true)
+        {
+            List = result.Value;
+
+            if (List is not null && List.Any() == true)
+            {
+                SelectedValue = List.First().ValueId;
+            }
+        }
+        else
+        {
+            RequestResultService.AddResult(result);
+        }
+
+        if (SelectedValueChanged.HasDelegate)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+        
+        Placeholder = backUpPlaceholder;
+    }
+}

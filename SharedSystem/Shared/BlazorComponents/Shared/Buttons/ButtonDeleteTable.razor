@@ -1,0 +1,14 @@
+<Button IsSmall="true"
+        IsOutLine="false"
+        IsWidth100="false"
+        BootstrapColor="BootstrapColor.Link"
+        title="@(Resources.ButtonCaptions.Delete)"
+        OnCLick="args => OnCLick.InvokeAsync(args)"
+        Class="m-0 p-0">
+    <i class="bt bi-trash text-danger"></i>
+</Button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCLick { get; set; }
+}

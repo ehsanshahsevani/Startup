@@ -1,0 +1,12 @@
+<table
+    class="table @(Infrastructure.Utility.GetTableColorByBootstrapColor(TableColor)) @(IsSmall == true ? "table-sm" : "") @(IsHover == true ? "table-hover" : "") @(TextCenter == true ? "text-center" : "") ">
+    @(ChildContent)
+</table>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public bool IsHover { get; set; } = true;
+    [Parameter] public bool IsSmall { get; set; } = true;
+    [Parameter] public bool TextCenter { get; set; } = true;
+    [Parameter] public BootstrapColor TableColor { get; set; }
+}

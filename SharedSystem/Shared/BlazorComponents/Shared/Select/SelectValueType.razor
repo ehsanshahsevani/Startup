@@ -1,0 +1,38 @@
+@using ValueType = Enums.Shared.ValueType
+
+<SelectCustom ShowPlaceholderItem="false"
+              Id="@Id"
+              SelectedValue="@(SelectedValue.ToString())"
+              SelectedValueChanged="ValueTypeHasChanged"
+              Options="@(_valueSelectOptions)"/>
+
+@code {
+    private readonly List<UiSelectModel>? _valueSelectOptions;
+
+    [Parameter] public ValueType SelectedValue { get; set; }
+
+    [Parameter] public EventCallback<ValueType> SelectedValueChanged { get; set; }
+
+    [Parameter] public string? Id { get; set; }
+    
+    public SelectValueType()
+    {
+        _valueSelectOptions =
+        [
+            new UiSelectModel
+                (Resources.DataDictionary.Percent, nameof(ValueType.Percent)),
+            new UiSelectModel
+                (Resources.DataDictionary.Price, nameof(ValueType.Price))
+        ];
+    }
+
+    private async Task ValueTypeHasChanged(string? e)
+    {
+        if (Enum.TryParse<ValueType>(e, out var parsedValue))
+        {
+            SelectedValue = parsedValue;
+            await SelectedValueChanged.InvokeAsync(parsedValue);
+        }
+    }
+
+}

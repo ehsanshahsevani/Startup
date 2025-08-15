@@ -1,0 +1,153 @@
+@inherits ComponentBaseMarketplaceFullCustom<RoleMoneyResponseViewModel, RoleMoneyRequestViewModel>
+
+@page "/role-money/{Id?}"
+
+<PageTitle>
+    @(Resources.DataDictionary.RoleMoney)
+</PageTitle>
+
+<PageDescription PageDescriptionModel="@(_pageDescription)" SubSystem="@(nameof(RoleMoney))"/>
+
+<Card>
+    <CardHeader UpdateMode="string.IsNullOrEmpty(Model.Id) == false"/>
+    <CardBody>
+        <Form>
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.TypeRoleMoneyId))" IsRequired="true">
+                    @(Resources.DataDictionary.TypeRoleMoney)
+                </LabelText>
+                <SelectTypeRoleMoney @bind-SelectedValue="Model.TypeRoleMoneyId" Id="@(nameof(Model.TypeRoleMoneyId))"
+                                 Placeholder="@(Resources.DataDictionary.TypeRoleMoney)"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.StartTime))" IsRequired="true">
+                    @(Resources.DataDictionary.StartTime)
+                </LabelText>
+                <SelectTimeRoleMoney @bind-SelectedValue="Model.StartTime" Id="@(nameof(Model.StartTime))"
+                                 Placeholder="@(Resources.DataDictionary.StartTime)"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.EndTime))" IsRequired="true">
+                    @(Resources.DataDictionary.EndTime)
+                </LabelText>
+                <SelectTimeRoleMoney @bind-SelectedValue="Model.EndTime" Id="@(nameof(Model.EndTime))"
+                                 Placeholder="@(Resources.DataDictionary.EndTime)"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Min))" IsRequired="true">
+                    @(Resources.DataDictionary.Min)
+                </LabelText>
+                <InputNumberCustom @bind-Value="Model.Min" Id="@(nameof(Model.Min))"
+                                 Placeholder="@(Resources.DataDictionary.Min)"/>
+            </FormControlSection>
+
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Max))" IsRequired="true">
+                    @(Resources.DataDictionary.Max)
+                </LabelText>
+                <InputNumberCustom @bind-Value="Model.Max" Id="@(nameof(Model.Max))"
+                                 Placeholder="@(Resources.DataDictionary.Max)"/>
+            </FormControlSection>
+            
+            <FormControlSection>
+                <LabelText For="order" Description="@(Resources.Messages.ForOrdering)">
+                    @(Resources.DataDictionary.Order)
+                </LabelText>
+                <InputNumberCustom @bind-Value="@(Model.Ordering)" Id="order"
+                                   Placeholder="@(Resources.Messages.ForOrdering)"/>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.IsActive)" Id="@(nameof(Model.IsActive))"/>
+                <LabelCheck For="@(nameof(Model.IsActive))">
+                    @(Resources.DataDictionary.IsActive)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection OneRow="true">
+                <LabelText For="description">
+                    @(Resources.DataDictionary.Description)
+                </LabelText>
+                <TextAreaCustom @bind-Value="@(Model.Description)" Id="@(nameof(Model.Description))"
+                                Rows="3"></TextAreaCustom>
+            </FormControlSection>
+        </Form>
+    </CardBody>
+    <CardFooter>
+        @if (string.IsNullOrEmpty(Model.Id) == true)
+        {
+            <ButtonCreate OnCLick="@(CreateAsync)"/>
+        }
+        else
+        {
+            <ButtonSaveChanges OnCLick="@(() => _modalUpdateQuestion!.ShowAsync(Model.Id))"/>
+            <ButtonCancel OnCLick="@(OffUpdateMode)"/>
+        }
+    </CardFooter>
+</Card>
+
+<hr>
+
+<FormSearch OnSearch="textSearch => OnSearchAsync(textSearch)"/>
+
+<TableSection>
+    <Table>
+        <TableHead>
+            <TableRow IsActive="true">
+                <TableHeader>@(Resources.DataDictionary.Row)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.CreateDate)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.TypeRoleMoney)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.StartTime)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.EndTime)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Min)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Max)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Order)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Opration)</TableHeader>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            @if (List is null)
+            {
+                <TableRow TableColor="BootstrapColor.Warning">
+                    <TableData Colspan="10">
+                        @(Resources.Messages.TextLoading)
+                    </TableData>
+                </TableRow>
+            }
+            else
+            {
+                for (int index = 0; index < List.Count; index++)
+                {
+                    RoleMoneyResponseViewModel item = List[index];
+
+                    var showIndex = index;
+
+                    <TableRow IsActive="item.IsActive">
+                        <TableData>@(showIndex + 1)</TableData>
+                        <TableData>@(item.CreateDateShamsi) | @(item.CreateTime)</TableData>
+                        <TableData>@(item.TypeRoleMoneyDisplayName)</TableData>
+                        <TableData>@(item.StartTime.ToString(@"hh\:mm"))</TableData>
+                        <TableData>@(item.EndTime.ToString(@"hh\:mm"))</TableData>
+                        <TableData>@(item.Min)</TableData>
+                        <TableData>@(item.Max)</TableData>
+                        <TableData>@(item.Ordering)</TableData>
+                        <TableData>
+                            <Update_Delete OnClickedDeleteButton="() => _modalDeleteQuestion!.ShowAsync(item.Id!)"
+                                           OnClickedUpdateButton="() => GoToPageAsync(MarketplaceRoutes.RoleMoney(), item.Id!)"/>
+                        </TableData>
+                    </TableRow>
+                }
+            }
+        </TableBody>
+    </Table>
+    <PaginationSystem @ref="_paginationSystem"
+                      MetaData="_metaData"
+                      OnChangedMetaData="CallbackMetaData"/>
+</TableSection>
+
+<ModalLoading @ref="_loadingModal"/>
+
+<ModalDeleteQuestion @ref="_modalDeleteQuestion" OnDeleteConfirmed="DeleteAsync"/>
+
+<ModalUpdateQuestion @ref="_modalUpdateQuestion" OnUpdateConfirmed="UpdateAsync"/>

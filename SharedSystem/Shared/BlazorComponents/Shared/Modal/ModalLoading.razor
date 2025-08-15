@@ -1,0 +1,81 @@
+<ModalComponent @ref="_modal"
+                ModalId="loadingModal"
+                Title="@(LoadingTitle)"
+                HasFooter="false"
+                HeaderBckgroundColor="BootstrapColor.Primary">
+    <ChildContent>
+        <div class="text-center">
+            <p class="mt-3">
+                <span>
+                    <img src="images/logo-talasoot.svg"
+                         class="rotating-image-right-to-left"
+                         alt="loading" width="45" height="45" />
+                    @(LoadingMessage)
+                </span>
+            </p>
+        </div>
+        <div class="card-footer text-start" style="display:@(IsFooterVisible == true ? "block" : "none")">
+            <Button OnClick="HideAsync" BootstrapColor="BootstrapColor.Link">
+                @(Resources.ButtonCaptions.CloseAndTryAgain)
+            </Button>
+        </div>
+    </ChildContent>
+</ModalComponent>
+
+@code {
+    private ModalComponent? _modal;
+
+    private string LoadingTitle { get; set; } = "لطفاً صبر کنید";
+    private string LoadingMessage { get; set; } = "در حال پردازش درخواست...";
+
+    private bool IsFooterVisible { get; set; } = false;
+    
+    private CancellationTokenSource? _cancellationTokenSource;
+    
+    private bool IsModalOpen { get; set; } = false;
+    
+    public async Task ShowAsync()
+    {
+        if (_modal != null)
+        {
+            IsFooterVisible = false;
+            IsModalOpen = true;
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            await _modal.ShowAsync();
+
+            CheckIfModalRemainsOpenForTimeout();
+        }
+    }
+
+    private async void CheckIfModalRemainsOpenForTimeout()
+    {
+        try
+        {
+            await Task.Delay(20000, _cancellationTokenSource!.Token);
+
+            if (IsModalOpen == true)
+            {
+                IsFooterVisible = true;
+                StateHasChanged();
+            }
+        }
+        catch (TaskCanceledException)
+        {
+        }
+    }
+
+    public async Task HideAsync()
+    {
+        _cancellationTokenSource?.Cancel();
+        IsFooterVisible = false;
+        IsModalOpen = false;
+        StateHasChanged();
+
+        if (_modal != null)
+        {
+            await _modal.HideAsync();
+        }
+    }
+}

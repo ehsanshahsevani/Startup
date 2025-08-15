@@ -1,0 +1,18 @@
+@if (TableColor != BootstrapColor.None)
+{
+    <tr class="@(Infrastructure.Utility.GetTableColorByBootstrapColor(TableColor))">
+        @(ChildContent)
+    </tr>
+}
+else
+{
+    <tr class="@(IsActive == false ? "table-f1f1f1" : Infrastructure.Utility.GetTableColorByBootstrapColor(TableColor))">
+        @(ChildContent)
+    </tr>
+}
+
+@code {
+    [Parameter] public bool IsActive { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public BootstrapColor TableColor { get; set; }
+}

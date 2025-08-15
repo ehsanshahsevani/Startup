@@ -1,0 +1,7 @@
+<div class="table-responsive">
+    @(ChildContent)
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

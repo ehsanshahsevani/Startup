@@ -1,0 +1,98 @@
+@inject ShopService ShopService
+@inject RequestResultService RequestResultService
+
+@inject PageState PageState
+
+<select
+    class="form-select fs-12px"
+    @onchange="HandleChange"
+    disabled="@_disabled"
+    aria-label="Dropdown select">
+    <option value="">@(Placeholder)</option>
+    @foreach (var option in List)
+    {
+        if (SelectedValue == option.ValueId)
+        {
+            <option value="@option.ValueId" selected>@(option.Value)</option>
+        }
+        else
+        {
+            <option value="@option.ValueId">@(option.Value)</option>
+        }
+    }
+</select>
+
+@code {
+    [Parameter]
+    public string? SelectedValue { get; set; }
+
+    private bool _disabled = false;
+    
+    [Parameter]
+    public EventCallback<string> SelectedValueChanged { get; set; }
+
+    public List<UiSelectModel> List { get; set; }
+    
+    [Parameter]
+    public string Placeholder { get; set; } = "انتخاب کنید";
+
+    [Parameter]
+    public bool IsRequired { get; set; } = false;
+
+    [Parameter]
+    public EventCallback OnRequiredValidationFailed { get; set; }
+    
+    public SelectShop() : base()
+    {
+        SelectedValue = null;
+        List = new List<UiSelectModel>();
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (PageState.ShopLocked == true)
+        {
+            SelectedValue = PageState.ShopId;
+            _disabled = PageState.ShopLocked;
+        }
+        
+        if (SelectedValue is not null)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+
+        await SetListAsync();
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        SelectedValue = e.Value?.ToString();
+
+        if (IsRequired == true && string.IsNullOrEmpty(SelectedValue) == true)
+        {
+            if (OnRequiredValidationFailed.HasDelegate)
+            {
+                await OnRequiredValidationFailed.InvokeAsync();
+            }
+        }
+        
+        if (SelectedValueChanged.HasDelegate == true)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+    }
+
+    private async Task SetListAsync()
+    {
+        var result = await ShopService.GetDropDownDataAsync();
+
+        if (result.IsSuccess == true)
+        {
+            List = result.Value!;
+        }
+        else
+        {
+            RequestResultService.AddResult(result);
+        }
+    }
+}

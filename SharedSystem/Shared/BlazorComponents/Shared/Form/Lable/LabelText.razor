@@ -1,0 +1,38 @@
+<Label For="@(For)" Class="form-label">
+    @if (ChildContent is null)
+    {
+        @: هیچ عنوانی ثبت نشده
+    }
+    else
+    {
+        @(ChildContent)
+    }
+
+    @if (Flag == true)
+    {
+        @if (IsRequired == true)
+        {
+            <i class="bi bi-star-fill text-danger fs-9 mx-1"></i>
+        }
+        else
+        {
+            @: &nbsp;
+            @if (string.IsNullOrEmpty(Description) == false)
+            {
+                @:[ @(Description) ]
+            }
+        }
+    }
+</Label>
+
+@code {
+    [Parameter] public string? For { get; set; }
+
+    [Parameter] public bool IsRequired { get; set; }
+
+    [Parameter] public bool Flag { get; set; } = true;
+
+    [Parameter] public string? Description { get; set; } = Resources.DataDictionary.Optinal;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

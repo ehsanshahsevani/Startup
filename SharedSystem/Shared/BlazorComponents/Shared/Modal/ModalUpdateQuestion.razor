@@ -1,0 +1,54 @@
+<ModalQuestion
+    ModalId="@(ModalId)"
+    @ref="_modal"
+    OnYes="ConfirmUpdate"
+    OnNo="CancelUpdate"
+    Color="BootstrapColor.Warning">
+    <ChildContent>
+        <p>
+            @(Resources.Messages.QuestionUpdate)
+        </p>
+        <p class="text-danger fs-6">
+            @(Resources.Messages.ConfirmWarning)
+        </p>
+    </ChildContent>
+</ModalQuestion>
+
+@code {
+    private ModalQuestion? _modal;
+    [Parameter] public string ModalId { get; set; } = "modal-confirm-update";
+    [Parameter] public EventCallback<string> OnUpdateConfirmed { get; set; }
+    [Parameter] public EventCallback OnUpdateCancelled { get; set; }
+    
+    public string? QuestionId { get; set; }
+    
+    private async Task ConfirmUpdate()
+    {
+        if (string.IsNullOrEmpty(QuestionId) == true)
+        {
+            throw new NullReferenceException(nameof(QuestionId));
+        }
+        
+        if (OnUpdateConfirmed.HasDelegate)
+        {
+            await OnUpdateConfirmed.InvokeAsync(QuestionId);
+        }
+    }
+
+    private async Task CancelUpdate()
+    {
+        if (OnUpdateCancelled.HasDelegate)
+        {
+            await OnUpdateCancelled.InvokeAsync();
+        }
+    }
+
+    public async Task ShowAsync(string questionId)
+    {
+        if (_modal is not null)
+        {
+            QuestionId = questionId;
+            await _modal.ShowAsync();
+        }
+    }
+}

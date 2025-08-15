@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="SkiaSharp" Version="3.119.0" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="SkiaSharp">
+        <HintPath>bin\Debug\net9.0\SkiaSharp.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\SeedworkSystem\ControllerSeedworks\ControllerSeedworks.csproj" />
+      <ProjectReference Include="..\..\..\SharedSystem\Shared\DecoyabServices\DecoyabServices.csproj" />
+      <ProjectReference Include="..\..\..\SharedSystem\Shared\HttpServices\HttpServices.csproj" />
+      <ProjectReference Include="..\..\..\SharedSystem\Shared\ViewModels\ViewModels.csproj" />
+      <ProjectReference Include="..\..\Core\Domain\Domain.csproj" />
+      <ProjectReference Include="..\..\Core\Persistence\Persistence.csproj" />
+      <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\deleted\" />
+      <Folder Include="wwwroot\uploads\" />
+      <Folder Include="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-f9bede27-181d-4814-b2c4-553cc6e0b2df.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-f9bede27-181d-4814-b2c4-553cc6e0b2df-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-be70b5e1-f985-4876-b4f5-e02fc1e4530d-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-b203f552-0abc-4c73-b76e-f9da406570fc.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-b203f552-0abc-4c73-b76e-f9da406570fc-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-9be26d09-79b6-4b9a-8eaa-c885edaf93d0.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-9be26d09-79b6-4b9a-8eaa-c885edaf93d0-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-994cc6ac-d250-4ae0-b19a-aad0db9c6f34.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-994cc6ac-d250-4ae0-b19a-aad0db9c6f34-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-931b4287-39bf-4570-b950-0c696d5aff6f.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-931b4287-39bf-4570-b950-0c696d5aff6f-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-8b8635b6-6d57-4740-a479-b5810dc02094.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-8b8635b6-6d57-4740-a479-b5810dc02094-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-856de929-a90c-4f9d-89e9-11dd546b05e1.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-856de929-a90c-4f9d-89e9-11dd546b05e1-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-823879ac-c660-4d90-9fdd-9d6ed225ae5a.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-823879ac-c660-4d90-9fdd-9d6ed225ae5a-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-6c63ce64-72b4-4bd6-918e-98304014224f.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-6c63ce64-72b4-4bd6-918e-98304014224f-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-6079ebaf-f76f-47ed-b5a0-0bb5f5e81ba4.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-6079ebaf-f76f-47ed-b5a0-0bb5f5e81ba4-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-3988ddd3-73d1-4f8a-a0c5-43c410260b00.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-3988ddd3-73d1-4f8a-a0c5-43c410260b00-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-38e7be0c-48cc-40c4-8448-6f4936e7948c.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-38e7be0c-48cc-40c4-8448-6f4936e7948c-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-1a72cef1-1320-4178-9caa-4f0626a82fde.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-1a72cef1-1320-4178-9caa-4f0626a82fde-thumbnail.jpg" />
+      <Content Remove="wwwroot\uploads\C620E381-9CDE-4A6F-90E3-ACD03D2128BA\Shop-133c35d8-7a22-4826-986a-4776dea466ea.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Web.config">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

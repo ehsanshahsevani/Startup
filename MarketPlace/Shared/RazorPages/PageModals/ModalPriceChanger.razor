@@ -1,0 +1,237 @@
+@inject RequestResultService RequestResultService
+@inject ProductHistoryService ProductHistoryService
+
+<ModalComponent ModalId="@(ModalId)"
+                @ref="_modal" Title="@(Title)"
+                HasFooter="false"
+                HeaderBckgroundColor="@(Color)">
+    <Form>
+        @if (Model.NewPrice.HasValue == true)
+        {
+            <FormControlSection OneRow="true">
+                <h4 class="@(Model.ChangeDirection == ChangeDirection.Increase ? "text-success" : "text-danger")">
+                    <span>
+                        @if (Model.ChangeDirection == ChangeDirection.Increase)
+                        {
+                            <i class="bi bi-arrow-up"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-arrow-down"></i>
+                        }
+                        @(Model.NewPrice.SeparateThousands())
+                    </span>
+                </h4>
+            </FormControlSection>
+        }
+        
+        <FormControlSection IsTextStart="true" OneRow="true">
+            <input type="radio"
+                   class="btn-check"
+                   name="@(nameof(Model.ChangeDirection))"
+                   id="@nameof(Resources.DataDictionary.Increase)"
+                   value="@((int)ChangeDirection.Increase)"
+                   checked
+                   autocomplete="off" @onchange="OnChangeDirection">
+            <label class="btn btn-sm btn-outline-success"
+                   for="@nameof(Resources.DataDictionary.Increase)">
+                @(Resources.DataDictionary.Increase)
+                <i class="bi bi-arrow-up-circle-fill"></i>
+            </label>
+
+            <input type="radio"
+                   class="btn-check"
+                   name="@(nameof(Model.ChangeDirection))"
+                   id="@nameof(Resources.DataDictionary.Decrease)" 
+                   value="@((int)ChangeDirection.Decrease)"
+                   autocomplete="off" @onchange="OnChangeDirection">
+            <label class="btn btn-sm btn-outline-danger"
+                   for="@nameof(Resources.DataDictionary.Decrease)">
+                @(Resources.DataDictionary.Decrease)
+                <i class="bi bi-arrow-down-circle-fill"></i>
+            </label>
+        </FormControlSection>
+
+        <FormControlSection OneRow="true" IsTextCenter="false">
+            <LabelText Flag="false">
+                @(Resources.DataDictionary.ValueType)
+            </LabelText>
+            <SelectValueType/>
+        </FormControlSection>
+
+        @switch (Model.ValueType)
+        {
+            case ValueType.Percent:
+            {
+                <FormControlSection OneRow="true">
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.Percent)
+                    </LabelText>
+                    <InputNumberCustom @bind-Value="Model.Percent"/>
+                </FormControlSection>
+                break;
+            }
+            case ValueType.Price:
+            {
+                <FormControlSection OneRow="true">
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.Price)
+                    </LabelText>
+                    <InputNumberCustom @bind-Value="Model.NewPrice"/>
+                </FormControlSection>
+
+                break;
+            }
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        <FormControlSection OneRow="true">
+            <InputCheckBoxCustom @bind-Value="Model.AffectPurchasePrice"
+                                 Id="@(nameof(Model.AffectPurchasePrice))"/>
+            <LabelCheck For="@(nameof(Model.AffectPurchasePrice))">
+                @(Resources.DataDictionary.AffectPurchasePrice)
+            </LabelCheck>
+        </FormControlSection>
+        
+        <FormControlSection OneRow="true">
+            <LabelText For="@nameof(Model.CurrentCount)">
+                @(Resources.DataDictionary.CurrentCount) @(Model.CurrentCount.SeparateThousands())
+            </LabelText>
+            <InputNumberCustom Id="@(nameof(Model.CurrentCount))"
+                               @bind-Value="@(Model.CurrentCount)"/>
+        </FormControlSection>
+    </Form>
+
+    <div class="modal-footer m-0 p-0">
+        <Button BootstrapColor="BootstrapColor.Primary"
+                IsOutLine="true"
+                IsWidth100="false"
+                Title="@(Resources.ButtonCaptions.Save)"
+                OnCLick="OnSubmitClicked">
+            @(Resources.ButtonCaptions.Save)
+        </Button>
+        <Button BootstrapColor="BootstrapColor.Secondary"
+                IsOutLine="true"
+                IsWidth100="false"
+                Title="@(Resources.ButtonCaptions.Close)"
+                OnCLick="OnCloseClicked">
+            @(Resources.ButtonCaptions.Close)
+        </Button>
+    </div>
+</ModalComponent>
+
+
+@code {
+    private ModalComponent? _modal;
+
+    public PriceChangeRequestModel Model { get; set; }
+
+    [Parameter]
+    public string ProductId { get; set; }
+    
+    [Parameter] public BootstrapColor Color { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string ModalId { get; set; } = "modal-price-changer";
+
+    [Parameter] public EventCallback<ProductResponseViewModel> OnSubmit { get; set; }
+    
+    [Parameter] public string? Title { get; set; } = Resources.DataDictionary.SubmitForm;
+
+    public ModalPriceChanger()
+    {
+        Model = new PriceChangeRequestModel
+        {
+            ChangeDirection = ChangeDirection.Increase
+        };
+    }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private async Task OnSubmitClicked()
+    {
+        Model.ProductId = ProductId;
+        
+        var resultValidate = Model.Validate();
+
+        RequestResultService.AddResult(resultValidate);
+
+        if (resultValidate.IsSuccess == true)
+        {
+            var result = 
+                await ProductHistoryService.PriceChangerAsync(Model);
+
+            RequestResultService.AddResult(result);
+
+            if (result.IsSuccess == true)
+            {
+                if (OnSubmit.HasDelegate)
+                {
+                    await OnSubmit.InvokeAsync(result.Value);
+                    
+                    Model = new PriceChangeRequestModel();
+                }
+                
+                await HideAsync();
+            }
+        }
+    }
+
+    private async Task OnCloseClicked()
+    {
+        await HideAsync();
+
+        if (OnClose.HasDelegate)
+        {
+            await OnClose.InvokeAsync(null);
+        }
+    }
+
+    public async Task ShowAsync(string productId)
+    {
+        if (string.IsNullOrEmpty(productId) == true)
+        {
+            throw new NullReferenceException(nameof(ProductId));
+        }
+        
+        ProductId = productId;
+        
+        if (_modal != null)
+        {
+            await _modal.ShowAsync();
+        }
+    }
+
+    private async Task HideAsync()
+    {
+        if (_modal != null)
+        {
+            await _modal.HideAsync();
+        }
+    }
+
+    private void ValueTypeHasChanged(string? e)
+    {
+        Model.Percent = null;
+        Model.NewPrice = null;
+        
+        if (Enum.TryParse<ValueType>(e, out var parsedValue))
+        {
+            if (Model.ValueType == parsedValue)
+            {
+                // No change
+                return;
+            }
+
+            Model.ValueType = parsedValue;
+        }
+    }
+
+    private void OnChangeDirection(ChangeEventArgs eventArgs)
+    {
+        Model.ChangeDirection =
+            (ChangeDirection)Convert.ToInt32(eventArgs.Value);
+    }
+}

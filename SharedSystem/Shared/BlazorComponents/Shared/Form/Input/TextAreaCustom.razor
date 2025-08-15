@@ -1,0 +1,33 @@
+<textarea
+    class="@Class"
+    id="@(Id)"
+    rows="@(Rows)"
+    value="@Value"
+    @oninput="OnInputChanged"
+    @attributes="AdditionalAttributes">
+</textarea>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+
+    [Parameter] public string? Class { get; set; } = "form-control";
+
+    [Parameter] public string? Value { get; set; }
+
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    [Parameter] public int Rows { get; set; } = 1;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task OnInputChanged(ChangeEventArgs e)
+    {
+        var newValue = e?.Value?.ToString();
+        if (newValue != Value)
+        {
+            Value = newValue;
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+}

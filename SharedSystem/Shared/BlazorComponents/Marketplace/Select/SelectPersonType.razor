@@ -1,0 +1,77 @@
+<select
+    class="form-select fs-12px"
+    @onchange="HandleChange"
+    aria-label="Dropdown select">
+    @foreach (var option in List)
+    {
+        if (SelectedValue == option.ValueId)
+        {
+            <option value="@option.ValueId" selected>@(option.Value)</option>
+        }
+        else
+        {
+            <option value="@option.ValueId">@(option.Value)</option>
+        }
+    }
+</select>
+
+
+@code {
+    [Parameter] public string? SelectedValue { get; set; } = "0";
+
+    [Parameter] public EventCallback<string> SelectedValueChanged { get; set; }
+
+    public List<UiSelectModel> List { get; set; }
+
+    [Parameter] public string Placeholder { get; set; } = "انتخاب کنید";
+
+    [Parameter] public string? InitialId { get; set; }
+
+    [Parameter] public bool IsRequired { get; set; } = false;
+
+    [Parameter] public EventCallback OnRequiredValidationFailed { get; set; }
+
+    public SelectPersonType() : base()
+    {
+        SelectedValue = null;
+        List = [];
+    }
+
+    protected override void OnInitialized()
+    {
+        if (InitialId is not null)
+        {
+            SelectedValue = InitialId;
+        }
+
+        SetListAsync();
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        SelectedValue = e.Value?.ToString();
+
+        if (IsRequired == true && string.IsNullOrEmpty(SelectedValue) == true)
+        {
+            if (OnRequiredValidationFailed.HasDelegate)
+            {
+                await OnRequiredValidationFailed.InvokeAsync();
+            }
+        }
+
+        if (SelectedValueChanged.HasDelegate == true)
+        {
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
+        }
+    }
+
+    private void SetListAsync()
+    {
+        List =
+        [
+            new UiSelectModel("حقیقی", "0"),
+            new UiSelectModel("حقوقی", "1")
+        ];
+    }
+
+}

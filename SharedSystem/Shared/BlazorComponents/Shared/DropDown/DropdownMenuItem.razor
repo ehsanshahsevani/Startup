@@ -1,0 +1,55 @@
+@namespace ClientAdmin.Components
+
+@if (IsDivider)
+{
+    <li>
+        <hr class="dropdown-divider">
+    </li>
+}
+else
+{
+    <li class="text-end">
+        <a class="dropdown-item"
+           href="@(Href)"
+           @onclick="HandleClick"
+           @onclick:preventDefault="PreventDefault">
+            @if (string.IsNullOrEmpty(IconClass) == false)
+            {
+                <i class="@(IconClass) mx-1"></i>
+            }
+            @if (ChildContent is not null)
+            {
+                @(ChildContent)
+            }
+            else
+            {
+                @(Text)
+            }
+        </a>
+    </li>
+}
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+
+    [Parameter] public string Href { get; set; } = "#";
+
+    [Parameter] public string IconClass { get; set; } = "";
+
+    [Parameter] public bool IsDivider { get; set; }
+
+    [Parameter] public bool PreventDefault { get; set; } = true;
+
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private async Task HandleClick()
+    {
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync();
+        }
+    }
+
+}

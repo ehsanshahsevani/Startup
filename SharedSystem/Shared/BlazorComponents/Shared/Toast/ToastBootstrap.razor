@@ -1,0 +1,43 @@
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="@(Id)" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="images/logo-orange.png" width="20" class="rounded" alt="decoyab">
+            <strong class="mx-1">@(Title)</strong>
+            <button type="button" class="btn-close me-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body m-0 p-0 @(SetOpacity()) @(Utility.GetForgroundColorByBootstrapColor(ForgroundColorBody)) @(Utility.GetBackgoundColorByBootstrapColor(BackgroundColorBody))">
+            @(ChildContent)
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public BootstrapColor BackgroundColorBody { get; set; }
+    [Parameter] public BootstrapColor ForgroundColorBody { get; set; }
+    [Parameter] public bool OpacityIs75 { get; set; }
+    [Parameter] public bool OpacityIs50 { get; set; }
+    [Parameter] public bool OpacityIs10 { get; set; }
+
+    private string SetOpacity()
+    {
+        if (OpacityIs10 == true)
+        {
+            return "bg-opacity-10";
+        }
+        else if (OpacityIs50 == true)
+        {
+            return "bg-opacity-50";
+        }
+        else if (OpacityIs75 == true)
+        {
+            return "bg-opacity-75";
+        }
+        else
+        {
+            return "";
+        }
+    }
+}

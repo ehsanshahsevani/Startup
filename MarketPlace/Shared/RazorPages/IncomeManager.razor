@@ -1,0 +1,105 @@
+@inherits Infrastructure.Marketplace.Base.ComponentBaseMarketplaceWithModelCustom<IncomeBoxRequestViewModel>
+
+@page "/financial-sector-value-management"
+
+<PageTitle>
+    @(Resources.DataDictionary.FinancialSectorValueManagement)
+</PageTitle>
+@if (_hasLoaded == false)
+{
+    @: درحال دریافت اطلاعات
+}
+else @if (Model is null)
+{
+    <LoadingBoxCatch/>
+}
+else if (Model is not null)
+{
+    <PageDescription PageDescriptionModel="@(PageDescription)" SubSystem="null"/>
+
+    <Card>
+        <CardHeader UpdateMode="string.IsNullOrEmpty(base.Model.Id) == false">
+            @(Resources.DataDictionary.IncomiesSystem)
+        </CardHeader>
+        <CardBody>
+            <Form RowColsOnDesktop="5">
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.WalletRechargeFee)
+                    </LabelText>
+                    <InputNumberDecimalCustom @bind-Value="base.Model.RechargeWalletFeeAmount"/>
+                </FormControlSection>
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.GoldPurchaseFee)
+                    </LabelText>
+                    <InputNumberDecimalCustom @bind-Value="base.Model.PurchaseGoldFeeAmount"/>
+                </FormControlSection>
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.IncomeSaleOfGoldFee)
+                    </LabelText>
+                    <InputNumberDecimalCustom @bind-Value="base.Model.SelleOfGoldFeeAmount"/>
+                </FormControlSection>
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.CommissionFee)
+                    </LabelText>
+                    <InputNumberDecimalCustom @bind-Value="base.Model.CommissionFeeAmount"/>
+                </FormControlSection>
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.MaintenanceAndInsuranceFee)
+                    </LabelText>
+                    <InputNumberDecimalCustom @bind-Value="base.Model.MaintenanceAndInsuranceFeeAmount"/>
+                </FormControlSection>
+            </Form>
+        </CardBody>
+        <CardFooter>
+            <ButtonSaveChanges
+                OnCLick="@(() => ModalUpdateQuestion!.ShowAsync(questionId: Guid.NewGuid().ToString()))"/>
+        </CardFooter>
+    </Card>
+
+    <Card>
+        <CardHeader UpdateMode="string.IsNullOrEmpty(TreasuryBoxRequestViewModel.Id) == false">
+            @(Resources.DataDictionary.TreasurySystemAmount)
+        </CardHeader>
+        <CardBody>
+            <Form RowColsOnDesktop="3">
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.TreasuryGoldOnline)
+                    </LabelText>
+                    <InputNumberCustom @bind-Value="TreasuryBoxRequestViewModel.TreasuryGoldOnline"/>
+                </FormControlSection>
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.TreasuryGoldReceive)
+                    </LabelText>
+                    <InputNumberCustom @bind-Value="TreasuryBoxRequestViewModel.TreasuryGoldReceive"/>
+                </FormControlSection>
+                <FormControlSection>
+                    <LabelText Flag="false">
+                        @(Resources.DataDictionary.TalaSootBankAccountAmount)
+                    </LabelText>
+                    <InputNumberCustom @bind-Value="TreasuryBoxRequestViewModel.TalaSootBankAccountAmount"/>
+                </FormControlSection>
+            </Form>
+        </CardBody>
+        <CardFooter>
+            <ButtonSaveChanges
+                OnCLick="@(() => _modalUpdateQuestionTreasury!.ShowAsync(questionId: Guid.NewGuid().ToString()))"/>
+        </CardFooter>
+    </Card>
+}
+
+<ModalUpdateQuestion ModalId="ModalUpdateIncome"
+                     @ref="ModalUpdateQuestion"
+                     OnUpdateConfirmed="UpdateIncomeAsync"/>
+
+<ModalLoading @ref="LoadingModal"/>
+
+<ModalUpdateQuestion ModalId="ModalUpdateTreasury"
+                     @ref="_modalUpdateQuestionTreasury"
+                     OnUpdateConfirmed="UpdateTreasuryAsync"/>

@@ -1,0 +1,38 @@
+@inject UrlQueryService UrlQueryService
+
+<InputSearchCustom
+    @bind-Value="@TextSearch"
+    Placeholder="@(Resources.DataDictionary.Search)"
+    Class="mb-2 rounded rounded-3 border border-dark"
+    OnEntered="() => HandleSearchAsync()" />
+
+<SearchButton DisplayType="DisplayType.IconAndText"
+              OnCLick="() => HandleSearchAsync()" />
+
+@code {
+    public string? TextSearch { get; set; }
+
+    [Parameter] public EventCallback<string> OnSearch { get; set; }
+    
+    private async Task HandleSearchAsync()
+    {
+        var parameters = new Dictionary<string, string?>
+        {
+            ["textsearch"] = TextSearch
+        };
+
+        UrlQueryService.SetParameters(parameters);
+
+        await OnSearch.InvokeAsync(TextSearch);
+    }
+
+    protected override void OnInitialized()
+    {
+        var textSearchStr = UrlQueryService.GetParameter("textsearch");
+        
+        if (textSearchStr != null)
+        {
+            TextSearch = textSearchStr; 
+        }
+    }
+}

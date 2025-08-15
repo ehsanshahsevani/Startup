@@ -1,0 +1,262 @@
+@inject BlazorComponents.Services.UrlQueryService UrlQueryService
+
+@if (MetaData is null)
+{
+    return;
+}
+
+<div class="my-2">
+    <div class="bg-opacity-25 px-2 fs-12px" id="form-CountInEveryPage" style="display: inline;">
+        [ @(Resources.DataDictionary.CountInEveryPage):
+        <input type="number"
+               class="rounded rounded-1 border border-secondary"
+               @bind="PageSizeValue"
+               min="1" max="50" style="width: 45px;" />
+
+        <button @onclick="RefreshAsync" type="button" class="btn btn-sm py-0 px-1 mt-1"
+                title="@(Resources.ButtonCaptions.Referesh)">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+        ]
+    </div>
+
+    <span class="fs-12px">
+        [ @(Resources.DataDictionary.TotalPages): @(MetaData.TotalPages) ]
+        -
+        [ @(Resources.DataDictionary.TotalCount): @(MetaData.TotalCount) ]
+    </span>
+
+    <span class="mx-2">
+        <a @onclick="LastPageAsync"
+           class="btn btn-sm py-0 px-0 mt-0"
+           title="@(Resources.ButtonCaptions.LastPage)">
+            <i class="bi bi-chevron-double-right"></i>
+        </a>
+
+        <a @onclick="NextAsync"
+           class="btn btn-sm py-0 px-0 mt-0"
+           title="@(Resources.ButtonCaptions.Next)">
+            <i class="bi bi-chevron-right"></i>
+        </a>
+
+        <div class="bg-opacity-25 px-2 fs-12px" style="display: inline;">
+            <input type="number"
+                   class="rounded rounded-1 border border-secondary"
+                   @bind="CurrentPageValue"
+                   min="1" max="@(MetaData.TotalPages)" style="width: 45px;" />
+
+            <button @onclick="() => GoToPageAsync(CurrentPageValue)"
+                    type="button"
+                    class="btn btn-sm py-0 px-0 mt-0"
+                    title="@(Resources.ButtonCaptions.GoToPage)">
+                <i class="bi bi-reply"></i>
+            </button>
+        </div>
+
+        <a @onclick="PreviousAsync"
+           class="btn btn-sm py-0 px-0 mt-0"
+           title="@(Resources.ButtonCaptions.Previous)">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+
+        <a @onclick="FirstPageAsync"
+           class="btn btn-sm py-0 px-0 mt-0"
+           title="@(Resources.ButtonCaptions.FirstPage)">
+            <i class="bi bi-chevron-double-left"></i>
+        </a>
+    </span>
+</div>
+
+@code {
+    [Parameter] public MetaData? MetaData { get; set; }
+
+    [Parameter] public EventCallback<MetaData> OnChangedMetaData { get; set; }
+
+    private static readonly string CurrentPageKey = "PageNumber".ToLower();
+    private static readonly string PageSizeKey = nameof(MetaData.PageSize).ToLower();
+
+    private bool hasLoaded = false;
+    
+    private int PageSizeValue
+    {
+        get => MetaData?.PageSize ?? 10;  // پیش‌فرض 10
+        set
+        {
+            if (MetaData == null)
+            {
+                return;
+            }
+
+            var newValue = Math.Clamp(value, 1, 50);
+            
+            if (MetaData.PageSize != newValue)
+            {
+                MetaData.PageSize = newValue;
+                MetaData.CurrentPage = 1;
+
+                _ = OnChangedMetaData.InvokeAsync(MetaData);
+            
+                UpdateUrl();
+            }
+        }
+    }
+
+    private int CurrentPageValue
+    {
+        get => MetaData?.CurrentPage ?? 1;
+        set
+        {
+            if (MetaData == null)
+            {
+                return;
+            }
+
+            var newValue = Math.Clamp(value, 1, MetaData.TotalPages);
+            
+            if (MetaData.CurrentPage != newValue)
+            {
+                MetaData.CurrentPage = newValue;
+
+                _ = OnChangedMetaData.InvokeAsync(MetaData);
+                
+                UpdateUrl();
+            }
+        }
+    }
+
+    private void UpdateUrl()
+    {
+        if (MetaData == null)
+        {
+            return;
+        }
+
+        var parameters = new Dictionary<string, string?>
+        {
+            [PageSizeKey] = MetaData.PageSize.ToString(),
+            [CurrentPageKey] = MetaData.CurrentPage.ToString()
+        };
+
+        UrlQueryService.SetParameters(parameters);
+    }
+
+    protected override void OnParametersSet()
+    {
+        // فقط وقتی MetaData پر می‌شود، پارامترهای URL را اعمال می‌کنیم
+        if (MetaData != null && !hasLoaded)
+        {
+            ParseQueryFromUrl();
+            hasLoaded = true;  // بعد از اعمال پارامترها، پرچم را فعال می‌کنیم
+        }
+    }
+
+    private void ParseQueryFromUrl()
+    {
+        if (MetaData == null) return;
+
+        var pageSizeStr = UrlQueryService.GetParameter(PageSizeKey);
+        var currentPageStr = UrlQueryService.GetParameter(CurrentPageKey);
+
+        bool isModified = false; // پرچم برای بررسی تغییرات در URL
+
+        if (int.TryParse(pageSizeStr, out var pageSize))
+        {
+            if (MetaData.PageSize != pageSize && pageSize != 10)  // بررسی برای مغایرت با پیش‌فرض 10
+            {
+                MetaData.PageSize = Math.Clamp(pageSize, 1, 50);
+                isModified = true;
+            }
+        }
+        else if (MetaData.PageSize != 10) // اگر صفحه‌سایز در URL نیامد و متادیتا مقدار پیش‌فرض نداشت
+        {
+            MetaData.PageSize = 10;
+            isModified = true;
+        }
+
+        if (int.TryParse(currentPageStr, out var currentPage))
+        {
+            if (MetaData.CurrentPage != currentPage)
+            {
+                MetaData.CurrentPage = Math.Clamp(currentPage, 1, MetaData.TotalPages);
+                isModified = true;
+            }
+        }
+
+        // اگر تغییرات در پارامترهای URL اعمال شد، ایونت کال‌بک را اجرا می‌کنیم
+        if (isModified)
+        {
+            OnChangedMetaData.InvokeAsync(MetaData); // اعلان به دنیای بیرون
+        }
+    }
+
+    private async Task NextAsync()
+    {
+        if (MetaData == null || MetaData.HasNext() == false)
+        {
+            return;
+        }
+
+        await GoToPageAsync(MetaData.CurrentPage + 1);
+    }
+
+    private async Task PreviousAsync()
+    {
+        if (MetaData == null || MetaData.HasPrevious() == false)
+        {
+            return;
+        }
+
+        await GoToPageAsync(MetaData.CurrentPage - 1);
+    }
+
+    public async Task FirstPageAsync()
+    {
+        if (MetaData == null)
+        {
+            return;
+        }
+
+        await GoToPageAsync(1);
+    }
+
+    private async Task LastPageAsync()
+    {
+        if (MetaData == null || MetaData.TotalPages < 2)
+        {
+            return;
+        }
+
+        await GoToPageAsync(MetaData.TotalPages);
+    }
+
+    private async Task GoToPageAsync(int currentPage)
+    {
+        if (MetaData == null)
+        {
+            return;
+        }
+
+        if (currentPage < 1 || currentPage > MetaData.TotalPages)
+        {
+            return;
+        }
+
+        MetaData.CurrentPage = currentPage;
+        
+        await OnChangedMetaData.InvokeAsync(MetaData);
+        
+        UpdateUrl();
+    }
+
+    private async Task RefreshAsync()
+    {
+        if (MetaData == null)
+        {
+            return;
+        }
+
+        await OnChangedMetaData.InvokeAsync(MetaData);
+        
+        UpdateUrl();
+    }
+}

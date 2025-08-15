@@ -1,0 +1,19 @@
+@inject NavigationManager Navigation
+
+@code
+{
+	/// <summary>
+	/// New
+	/// </summary>
+	protected override void OnInitialized()
+	{
+		var returnUrl =
+			Navigation.Uri.Replace
+			(oldValue: Navigation.BaseUri, newValue: string.Empty);
+
+		var uri =
+			$"authentication/login/{returnUrl}";
+
+		Navigation.NavigateTo(uri: uri);
+	}
+}

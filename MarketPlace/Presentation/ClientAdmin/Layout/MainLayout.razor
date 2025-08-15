@@ -1,0 +1,58 @@
+﻿@using BlazorComponents.Services
+
+@inherits LayoutComponentBase
+@inject RequestResultService RequestResultService
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <ShowTime/>
+        </div>
+        <article class="content px-4 mb-4">
+            <ErrorBoundary @ref="errorBoundary">
+                @(Body)
+            </ErrorBoundary>
+        </article>
+    </main>
+</div>
+
+<MessageToast></MessageToast>
+
+@code {
+    private ErrorBoundary? errorBoundary;
+    private string? errorMessage;
+    private bool showErrorToast;
+
+    protected override void OnParametersSet()
+    {
+        // Recover the ErrorBoundary when parameters are set.
+        errorBoundary?.Recover();
+    }
+
+    // OnError="@(HandleError)"
+    
+    private void HandleError(Exception ex)
+    {
+        // Check for the specific exception and handle it.
+        if (ex.Message.Contains("Resource not found"))
+        {
+            errorMessage = ex.Message;
+            showErrorToast = true;
+
+            var result = new FluentResults.Result();
+            
+            result.WithError("خطای سرور: سرور درحال بروزرسانی میباشد. لطفا دقایقی دیگر تلاش بفرمایید");
+            
+            RequestResultService.AddResult(result.ConvertToSampleResult());
+            
+            // Optionally, log the exception or perform other actions.
+        }
+        else
+        {
+            // Handle other unhandled exceptions accordingly.
+        }
+    }
+}

@@ -1,0 +1,24 @@
+@namespace ClientAdmin.Components
+
+<div class="btn-group">
+    <button type="button"
+            class="btn btn-sm @(Utility.GetBtnColorByBootstrapColor(ButtonColor)) dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+        @(ButtonText)
+    </button>
+    <ul class="dropdown-menu">
+        @(ChildContent)
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; } = Resources.ButtonCaptions.More;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public BootstrapColor ButtonColor { get; set; } = BootstrapColor.Link;
+}

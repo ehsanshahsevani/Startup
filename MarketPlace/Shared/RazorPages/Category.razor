@@ -1,0 +1,110 @@
+@inherits ComponentBaseMarketplaceFullCustom<CategoryResponseViewModel, CategoryRequestViewModel>
+
+@page "/category/{Id?}"
+
+<PageTitle>
+    @(Resources.DataDictionary.Category)
+</PageTitle>
+
+<PageDescription PageDescriptionModel="@(_pageDescription)" SubSystem="@(nameof(Category))"/>
+
+<Card>
+    <CardHeader UpdateMode="string.IsNullOrEmpty(Model.Id) == false"/>
+    <CardBody>
+        <Form>
+            <FormControlSection>
+                <LabelText For="@(nameof(Model.Name))" IsRequired="true">
+                    @(Resources.DataDictionary.Name)
+                </LabelText>
+                <InputTextCustom @bind-Value="Model.Name" Id="@(nameof(Model.Name))"
+                                 Placeholder="@(Resources.DataDictionary.Name)"/>
+            </FormControlSection>
+            <FormControlSection>
+                <LabelText For="order" Description="@(Resources.Messages.ForOrdering)">
+                    @(Resources.DataDictionary.Order)
+                </LabelText>
+                <InputNumberCustom @bind-Value="@(Model.Ordering)" Id="order"
+                                   Placeholder="@(Resources.Messages.ForOrdering)"/>
+            </FormControlSection>
+            <FormControlSection IsCheckBoxSection="true">
+                <InputCheckBoxCustom @bind-Value="@(Model.IsActive)" Id="@(nameof(Model.IsActive))"/>
+                <LabelCheck For="@(nameof(Model.IsActive))">
+                    @(Resources.DataDictionary.IsActive)
+                </LabelCheck>
+            </FormControlSection>
+            <FormControlSection OneRow="true">
+                <LabelText For="description">
+                    @(Resources.DataDictionary.Description)
+                </LabelText>
+                <TextAreaCustom @bind-Value="@(Model.Description)" Id="@(nameof(Model.Description))"
+                                Rows="3"></TextAreaCustom>
+            </FormControlSection>
+        </Form>
+    </CardBody>
+    <CardFooter>
+        @if (string.IsNullOrEmpty(Model.Id) == true)
+        {
+            <ButtonCreate OnCLick="@(CreateAsync)"/>
+        }
+        else
+        {
+            <ButtonSaveChanges OnCLick="@(() => _modalUpdateQuestion!.ShowAsync(Model.Id))"/>
+            <ButtonCancel OnCLick="@(OffUpdateMode)"/>
+        }
+    </CardFooter>
+</Card>
+
+<hr>
+
+<FormSearch OnSearch="textSearch => OnSearchAsync(textSearch)"/>
+
+<TableSection>
+    <Table>
+        <TableHead>
+            <TableRow IsActive="true">
+                <TableHeader>@(Resources.DataDictionary.Row)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.CreateDate)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Name)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Order)</TableHeader>
+                <TableHeader>@(Resources.DataDictionary.Opration)</TableHeader>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            @if (List is null)
+            {
+                <TableRow TableColor="BootstrapColor.Warning">
+                    <TableData Colspan="10">
+                        @(Resources.Messages.TextLoading)
+                    </TableData>
+                </TableRow>
+            }
+            else
+            {
+                for (int index = 0; index < List.Count; index++)
+                {
+                    CategoryResponseViewModel item = List[index];
+
+                    var showIndex = index;
+
+                    <TableRow IsActive="item.IsActive">
+                        <TableData>@(showIndex + 1)</TableData>
+                        <TableData>@(item.CreateDateShamsi) | @(item.CreateTime)</TableData>
+                        <TableData>@(item.Name)</TableData>
+                        <TableData>@(item.Ordering)</TableData>
+                        <TableData>
+                            <Update_Delete OnClickedDeleteButton="() => _modalDeleteQuestion!.ShowAsync(item.Id!)"
+                                           OnClickedUpdateButton="() => GoToPageAsync(MarketplaceRoutes.Category(), item.Id!)"></Update_Delete>
+                        </TableData>
+                    </TableRow>
+                }
+            }
+        </TableBody>
+    </Table>
+    <PaginationSystem @ref="_paginationSystem" MetaData="_metaData" OnChangedMetaData="CallbackMetaData"></PaginationSystem>
+</TableSection>
+
+<ModalLoading @ref="_loadingModal"/>
+
+<ModalDeleteQuestion @ref="_modalDeleteQuestion" OnDeleteConfirmed="DeleteAsync"/>
+
+<ModalUpdateQuestion @ref="_modalUpdateQuestion" OnUpdateConfirmed="UpdateAsync"/>

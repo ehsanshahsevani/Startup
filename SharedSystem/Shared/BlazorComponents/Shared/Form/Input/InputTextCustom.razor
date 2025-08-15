@@ -1,0 +1,40 @@
+<input
+    id="@Id"
+    type="@_type"
+    class="@Class"
+    disabled="@Disabled"
+    placeholder="@Placeholder"
+    value="@Value"
+    @oninput="OnValueChanged"/>
+
+@code {
+    
+    private string? value;
+    
+    private string _type = "text";
+
+    [Parameter]
+    public string? Class { get; set; } = "form-control";
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+    
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        value = e?.Value?.ToString();
+
+        await ValueChanged.InvokeAsync(value);
+    }
+}

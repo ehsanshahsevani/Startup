@@ -1,0 +1,55 @@
+<ModalQuestion
+    @ref="_modal"
+    ModalId="@(ModalId)"
+    OnYes="ConfirmDelete"
+    OnNo="CancelDelete"
+    Color="BootstrapColor.Danger">
+    <ChildContent>
+        <p>
+            @(Resources.Messages.QuestionDelete)
+        </p>
+        <p class="text-danger">
+            @(Resources.Messages.ConfirmWarning)
+        </p>
+    </ChildContent>
+</ModalQuestion>
+
+@code {
+    private ModalQuestion? _modal;
+    [Parameter] public string ModalId { get; set; } = "modal-confirm-delete";
+    
+    [Parameter] public EventCallback<string> OnDeleteConfirmed { get; set; }
+    [Parameter] public EventCallback OnDeleteCancelled { get; set; }
+
+    public string? QuestionId { get; set; }
+    
+    private async Task ConfirmDelete()
+    {
+        if (string.IsNullOrEmpty(QuestionId) == true)
+        {
+            throw new NullReferenceException(nameof(QuestionId));
+        }
+        
+        if (OnDeleteConfirmed.HasDelegate)
+        {
+            await OnDeleteConfirmed.InvokeAsync(QuestionId);
+        }
+    }
+
+    private async Task CancelDelete()
+    {
+        if (OnDeleteCancelled.HasDelegate)
+        {
+            await OnDeleteCancelled.InvokeAsync();
+        }
+    }
+
+    public async Task ShowAsync(string questionId)
+    {
+        if (_modal is not null)
+        {
+            QuestionId = questionId;
+            await _modal.ShowAsync();
+        }
+    }
+}

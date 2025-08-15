@@ -1,0 +1,14 @@
+<Button IsSmall="true"
+        IsOutLine="false"
+        IsWidth100="false"
+        BootstrapColor="BootstrapColor.Warning"
+        title="@(Resources.ButtonCaptions.SaveChanges)"
+        OnCLick="args => OnCLick.InvokeAsync(args)">
+    <i class="bi bi-pencil-fill"></i>
+    @(Resources.ButtonCaptions.SaveChanges)
+</Button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCLick { get; set; }
+}

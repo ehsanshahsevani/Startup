@@ -1,0 +1,37 @@
+<input
+    id="@Id"
+    type="@_type"
+    class="@Class"
+    disabled="@Disabled"
+    placeholder="@Placeholder"
+    checked="@Value"
+    @onchange="OnValueChanged" />
+
+@code {
+    private string _type = "checkbox";
+
+    [Parameter]
+    public string? Class { get; set; } = "form-check-input";
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+    
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = Convert.ToBoolean(e.Value);
+        await ValueChanged.InvokeAsync(Value);
+    }
+}

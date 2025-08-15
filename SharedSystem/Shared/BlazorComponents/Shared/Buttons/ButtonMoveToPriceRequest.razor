@@ -1,0 +1,14 @@
+<Button IsSmall="true"
+        IsOutLine="false"
+        IsWidth100="false"
+        BootstrapColor="BootstrapColor.Link"
+        title="@(Resources.ButtonCaptions.MoveToPriceRequest)"
+        OnCLick="args => OnCLick.InvokeAsync(args)">
+    <i class="bi bi-activity"></i>
+    @(Resources.ButtonCaptions.MoveToPriceRequest)
+</Button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCLick { get; set; }
+}

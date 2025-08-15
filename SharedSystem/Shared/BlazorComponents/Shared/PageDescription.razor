@@ -1,0 +1,126 @@
+@inject SubSystemLocalService SubSystemLocalService
+@inject RequestResultService RequestResultService
+
+@if (PageDescriptionModel is null)
+{
+    return;
+}
+
+<a class="card-title h4 border-bottom border-danger text-decoration-none text-black" style="font-size: 1rem;"
+   data-bs-toggle="collapse" href="#description-page" role="button" aria-expanded="false"
+   aria-controls="collapseExample">
+
+    @if (string.IsNullOrEmpty(PageDescriptionModel.PageTitle) == true)
+    {
+        @: عنوان صفحه ثبت نشده است
+    }
+    else
+    {
+        @(PageDescriptionModel.PageTitle)
+    }
+    &nbsp;
+    <i class="text-danger bi bi-info-circle-fill"></i>
+</a>
+<div class="collapse" id="description-page" style="font-size: 12px">
+    <div class="card">
+        <div class="card-body p-2">
+            @if (string.IsNullOrEmpty(PageDescriptionModel.Header) == false)
+            {
+                <h5 class="mb-3">
+                    @(PageDescriptionModel.Header)
+                </h5>
+            }
+            else
+            {
+                <h6 class="mb-1">
+                    <i class="bi bi-list text-danger"></i>
+                    نکات این صفحه
+                </h6>
+            }
+            @if (PageDescriptionModel.Descriptions.Any() == true)
+            {
+                <div class="card-text">
+                    <ul>
+                        @foreach (var item in PageDescriptionModel.Descriptions)
+                        {
+                            <li>@(item)</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            @if (string.IsNullOrEmpty(_description) == false)
+            {
+                <h6 class="mb-1">
+                    <i class="bi bi-list-nested text-danger"></i>
+                    نکات اضافی
+                </h6>
+
+                <div class="card-text">
+                    <ul>
+                        @foreach (var item in _description.Split('|')
+                                      .Where(x => string.IsNullOrEmpty(x) == false)
+                                      .Select(x => x.Trim()))
+                        {
+                            <li>@(item)</li>
+                        }
+                    </ul>
+                </div>   
+            }
+        </div>
+        @if (PageDescriptionModel.FooterLink is not null && PageDescriptionModel.FooterLink.Any())
+        {
+            <h6 class="mb-1 mt-1 p-2">
+                <i class="bi bi-link text-danger"></i>
+                لینک های مرتبط
+            </h6>
+
+            <div class="m-2">
+                @foreach (var item in PageDescriptionModel.FooterLink)
+                {
+                    @:|
+                    <a href="@(item.Key)">
+                        @(item.Value)
+                    </a>
+                    @:|
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public PageDescriptionModel? PageDescriptionModel { get; set; }
+    [Parameter] public string? SubSystem { get; set; }
+
+    private string? _description;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SetDescriptionAsync();
+    }
+
+    private async Task SetDescriptionAsync()
+    {
+        if (string.IsNullOrEmpty(SubSystem) == false)
+        {
+            var result =
+                await SubSystemLocalService.GetDescriptionAsync(SubSystem);
+            
+            if (result.IsSuccess == true)
+            {
+                _description = result.Value;
+            }
+            else
+            {
+                RequestResultService.AddResult(result);
+            }
+        }
+        else
+        {
+            _description = null;
+        }
+    }
+
+}

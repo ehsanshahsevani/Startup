@@ -1,0 +1,38 @@
+<img src="@(Src)"
+     class="@(IsResponsive == true ? "img-fluid" : "")
+            @(IsThumbnails == true ? "img-thumbnail" : "")
+            @(IsRounded == true ? "rounded" : "") "
+     height="@(Height)"
+     style="max-height: 200px"
+     alt=""/>
+
+@code {
+    [Parameter] public IFormFile? Image { get; set; }
+
+    [Parameter] public bool IsResponsive { get; set; }
+
+    [Parameter] public bool IsThumbnails { get; set; }
+    
+    [Parameter] public bool IsRounded { get; set; }
+    
+    [Parameter] public int Height { get; set; }
+    
+    private string Src { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (Image is not null)
+        {
+            Src = await Image.ConvertToBase64Async();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Image is not null)
+        {
+            Src = await Image.ConvertToBase64Async();
+        }
+    }
+
+}

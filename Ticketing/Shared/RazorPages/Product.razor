@@ -1,0 +1,183 @@
+@* @inherits ComponentBaseMarketplaceFullCustom<ProductResponseViewModel, ProductRequestViewModel> *@
+@* *@
+@* @page "/product/{Id?}" *@
+@* *@
+@* <PageTitle> *@
+@*     @(Resources.DataDictionary.Products) *@
+@* </PageTitle> *@
+@* *@
+@* <PageDescription PageDescriptionModel="@(_pageDescription)" SubSystem="@(nameof(Branch))"/> *@
+@* *@
+@* <Card> *@
+@*     <CardHeader UpdateMode="string.IsNullOrEmpty(Model.Id) == false"/> *@
+@*     <CardBody> *@
+@*         <Form> *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(nameof(Model.CategoryId))" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.Category) *@
+@*                 </LabelText> *@
+@*                 <SelectCategory @bind-SelectedValue="Model.CategoryId" Id="@(nameof(Model.CategoryId))"/> *@
+@*             </FormControlSection> *@
+@* *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(Resources.DataDictionary.Branch)" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.Branch) *@
+@*                 </LabelText> *@
+@*                 <SelectBranch SelectedValueChanged="BranchOnChanged" *@
+@*                               SelectedValue="@(Model.BranchIds.FirstOrDefault())" *@
+@*                             Id="@(nameof(Resources.DataDictionary.Branch))"/> *@
+@*             </FormControlSection> *@
+@*              *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(nameof(Model.Name))" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.Name) *@
+@*                 </LabelText> *@
+@*                 <InputTextCustom @bind-Value="Model.Name" Id="@(nameof(Model.Name))" *@
+@*                                  Placeholder="@(Resources.DataDictionary.Name)"/> *@
+@*             </FormControlSection> *@
+@* *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(nameof(Model.GoldSoot))" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.GoldSoot) *@
+@*                 </LabelText> *@
+@*                 <InputNumberCustom @bind-Value="Model.GoldSoot" Id="@(nameof(Model.GoldSoot))" *@
+@*                                  Placeholder="@(Resources.DataDictionary.GoldSoot)"/> *@
+@*             </FormControlSection> *@
+@* *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(nameof(Model.Fee))" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.Fee) *@
+@*                 </LabelText> *@
+@*                 <InputNumberCustom @bind-Value="Model.Fee" Id="@(nameof(Model.Fee))" *@
+@*                                  Placeholder="@(Resources.DataDictionary.Fee)"/> *@
+@*             </FormControlSection> *@
+@* *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(nameof(Model.Count))" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.Count) *@
+@*                 </LabelText> *@
+@*                 <InputNumberCustom @bind-Value="Model.Count" Id="@(nameof(Model.Count))" *@
+@*                                  Placeholder="@(Resources.DataDictionary.Count)"/> *@
+@*             </FormControlSection> *@
+@* *@
+@*             <FormControlSection Hidden="IsEditMode == true"> *@
+@*                 <LabelText For="@(nameof(Model.FileUpload))" IsRequired="true"> *@
+@*                     @(Resources.DataDictionary.FileMobile) *@
+@*                 </LabelText> *@
+@*                 <InputFileCustom FilesChanged="OnFileHandle" Id="@(nameof(Model.FileUpload))"/> *@
+@*             </FormControlSection> *@
+@*              *@
+@*             <FormControlSection> *@
+@*                 <LabelText For="@(nameof(Model.Ordering))" Description="@(Resources.Messages.ForOrdering)"> *@
+@*                     @(Resources.DataDictionary.Order) *@
+@*                 </LabelText> *@
+@*                 <InputNumberCustom @bind-Value="@(Model.Ordering)" Id="@(nameof(Model.Ordering))" *@
+@*                                    Placeholder="@(Resources.Messages.ForOrdering)"/> *@
+@*             </FormControlSection> *@
+@*             <FormControlSection IsCheckBoxSection="true"> *@
+@*                 <InputCheckBoxCustom @bind-Value="@(Model.IsActive)" Id="@(nameof(Model.IsActive))"/> *@
+@*                 <LabelCheck For="@(nameof(Model.IsActive))"> *@
+@*                     @(Resources.DataDictionary.IsActive) *@
+@*                 </LabelCheck> *@
+@*             </FormControlSection> *@
+@*             <FormControlSection OneRow="true"> *@
+@*                 <LabelText For="@(nameof(Model.Description))"> *@
+@*                     @(Resources.DataDictionary.Description) *@
+@*                 </LabelText> *@
+@*                 <TextAreaCustom @bind-Value="@(Model.Description)" *@
+@*                                 Id="@(nameof(Model.Description))" *@
+@*                                 Rows="3"/> *@
+@*             </FormControlSection> *@
+@*         </Form> *@
+@*     </CardBody> *@
+@*     <CardFooter> *@
+@*         @if (string.IsNullOrEmpty(Model.Id) == true) *@
+@*         { *@
+@*             <ButtonCreate OnCLick="@(CreateAsync)"/> *@
+@*         } *@
+@*         else *@
+@*         { *@
+@*             <ButtonSaveChanges OnCLick="@(() => _modalUpdateQuestion!.ShowAsync(Model.Id))"/> *@
+@*             <ButtonCancel OnCLick="@(OffUpdateMode)"/> *@
+@*             @:| *@
+@*             <DropdownMenu ButtonColor="BootstrapColor.Secondary"> *@
+@*                 <DropdownMenuItem IsDivider="true"/> *@
+@*                 <DropdownMenuItem OnClick="@(() => _modalImageProductChanger!.ShowAsync(Model.Id!))"> *@
+@*                     @(Resources.DataDictionary.ChangeProfile) *@
+@*                 </DropdownMenuItem> *@
+@*             </DropdownMenu> *@
+@*         } *@
+@*     </CardFooter> *@
+@* </Card> *@
+@* *@
+@* <hr> *@
+@* *@
+@* <FormSearch OnSearch="textSearch => OnSearchAsync(textSearch)"/> *@
+@* *@
+@* <TableSection> *@
+@*     <Table> *@
+@*         <TableHead> *@
+@*             <TableRow IsActive="true"> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Row)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Image)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.CreateDate)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Name)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Fee)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Count)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Order)</TableHeader> *@
+@*                 <TableHeader>@(Resources.DataDictionary.Opration)</TableHeader> *@
+@*             </TableRow> *@
+@*         </TableHead> *@
+@*         <TableBody> *@
+@*             @if (List is null) *@
+@*             { *@
+@*                 <TableRow TableColor="BootstrapColor.Warning"> *@
+@*                     <TableData Colspan="10"> *@
+@*                         @(Resources.Messages.TextLoading) *@
+@*                     </TableData> *@
+@*                 </TableRow> *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 for (int index = 0; index < List.Count; index++) *@
+@*                 { *@
+@*                     ProductResponseViewModel item = List[index]; *@
+@* *@
+@*                     var showIndex = index; *@
+@* *@
+@*                     <TableRow IsActive="item.IsActive"> *@
+@*                         <TableData>@(showIndex + 1)</TableData> *@
+@*                         <TableData> *@
+@*                             <FileThumbnailViewre Alternative="@(item.Alternative)" *@
+@*                                                  FileHasExist="item.FileHasExist" *@
+@*                                                  FileThumbnailHasExist="item.FileThumbnailHasExist" *@
+@*                                                  FileThumbnailUrl="@(item.FileThumbnailUrl)" *@
+@*                                                  FileUrl="@(item.FileUrl)" *@
+@*                                                  ImageTitle="@(item.ImageTitle)"/> *@
+@*                         </TableData> *@
+@*                         <TableData>@(item.CreateDateShamsi) | @(item.CreateTime)</TableData> *@
+@*                         <TableData>@(item.Name)</TableData> *@
+@*                         <TableData>@(item.Fee)</TableData> *@
+@*                         <TableData>@(item.Count)</TableData> *@
+@*                         <TableData>@(item.Ordering)</TableData> *@
+@*                         <TableData> *@
+@*                             <Update_Delete OnClickedDeleteButton="() => _modalDeleteQuestion!.ShowAsync(item.Id!)" *@
+@*                                            OnClickedUpdateButton="() => GoToPageAsync(MarketplaceRoutes.Product(), item.Id!)"/> *@
+@*                         </TableData> *@
+@*                     </TableRow> *@
+@*                 } *@
+@*             } *@
+@*         </TableBody> *@
+@*     </Table> *@
+@*     <PaginationSystem @ref="_paginationSystem" *@
+@*                       MetaData="_metaData" *@
+@*                       OnChangedMetaData="CallbackMetaData"/> *@
+@* </TableSection> *@
+@* *@
+@* <ModalLoading @ref="_loadingModal"/> *@
+@* *@
+@* <ModalDeleteQuestion @ref="_modalDeleteQuestion" OnDeleteConfirmed="DeleteAsync"/> *@
+@* *@
+@* <ModalUpdateQuestion @ref="_modalUpdateQuestion" OnUpdateConfirmed="UpdateAsync"/> *@
+@* *@
+@* <ModalImageProductChanger @ref="_modalImageProductChanger" OnSubmit="@(UpdateRecordInTable)"/> *@

@@ -1,0 +1,93 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-dark" href="">
+            <img src="images/" width="50" alt="لوگو برند"/>
+                پنل ادمین نام برند
+        </a>
+        <button title="@(Resources.DataDictionary.Menu)" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <i class="navbar-toggler-icon text-light"></i>
+        </button>
+    </div>
+</div>
+
+<div class="@(NavMenuCssClass) nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link px-1" href="" Match="NavLinkMatch.All">
+                <span class="me-1">
+                    <i class="bi bi-house-door-fill"></i>
+                    @(Resources.DataDictionary.Home)
+                </span>
+            </NavLink>
+        </div>
+
+        <SlideDropdown Title="@(Resources.DataDictionary.Ticket)">
+            <li>
+                <NavLink class="nav-link px-1" href="@(MarketplaceRoutes.Category())">
+                    <span class="me-1">
+                        <i class="bi bi-bar-chart-steps"></i>
+                        @(Resources.DataDictionary.Category)
+                    </span>
+                </NavLink>
+            </li>
+        </SlideDropdown>
+        
+        <SlideDropdown Title="@(Resources.DataDictionary.PageSettings)">
+            <li>
+                <NavLink class="nav-link px-1" href="@(MarketplaceRoutes.Faq())">
+                    <span class="me-1">
+                        <i class="bi bi-patch-question"></i>
+                        @(Resources.DataDictionary.Faq)
+                    </span>
+                </NavLink>
+            </li>
+            
+            <li>
+                <NavLink class="nav-link px-1" href="@(MarketplaceRoutes.Banner())">
+                    <span class="me-1">
+                        <i class="bi bi-file-richtext"></i>
+                        @(Resources.DataDictionary.Banner)
+                    </span>
+                </NavLink>
+            </li>
+            
+            <li>
+                <NavLink class="nav-link px-1" href="@(MarketplaceRoutes.Social())">
+                    <span class="me-1">
+                        <i class="bi bi-cursor"></i>
+                        @(Resources.DataDictionary.Social)
+                    </span>
+                </NavLink>
+            </li>
+
+            <li>
+                <NavLink class="nav-link px-1" href="@(MarketplaceRoutes.TextDynamic())">
+                    <span class="me-1">
+                        <i class="bi bi-cursor-text"></i>
+                        @(Resources.DataDictionary.TextDynamic)
+                    </span>
+                </NavLink>
+            </li>
+            
+            @* <li> *@
+            @*     <NavLink class="nav-link px-1" href="@(MarketplaceRoutes.PageSetting())"> *@
+            @*         <span class="me-1"> *@
+            @*             <i class="bi bi-collection"></i> *@
+            @*             @(Resources.DataDictionary.Other) *@
+            @*         </span> *@
+            @*     </NavLink> *@
+            @* </li> *@
+        </SlideDropdown>
+    </nav>
+</div>
+
+@code {
+    private bool _collapseNavMenu = true;
+
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        _collapseNavMenu = !_collapseNavMenu;
+    }
+}

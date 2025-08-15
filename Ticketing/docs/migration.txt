@@ -1,0 +1,16 @@
+Add Migration:
+linux:
+dotnet ef migrations add --project Ticketing/Core/Persistence/Persistence.csproj --startup-project Ticketing/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug <NameMigration> --output-dir Migrations
+
+windows:
+dotnet ef migrations add --project Ticketing\Core\Persistence\Persistence.csproj --startup-project Ticketing\Presentation\RestFullApi\RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug InitialDb --output-dir Migrations
+
+Update Database:
+windows:
+dotnet ef database update --project Ticketing\Core\Persistence\Persistence.csproj --startup-project Ticketing\Presentation\RestFullApi\RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug
+
+linux:
+dotnet ef database update --project Ticketing/Core/Persistence/Persistence.csproj --startup-project Ticketing/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug
+
+Remove Migration:
+dotnet ef migrations remove --project Ticketing/Core/Persistence/Persistence.csproj --startup-project Ticketing/Presentation/RestFullApi/RestFullApi.csproj --context Persistence.DatabaseContext --configuration Debug --force

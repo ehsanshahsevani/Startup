@@ -1,0 +1,54 @@
+@if (!string.IsNullOrWhiteSpace(Href))
+{
+    <a href="@Href"
+       title="@(Title)"
+       target="@(OpenInNewTab ? "_blank" : "_self")"
+       class="btn @(IsSmall ? "btn-sm" : "") @(IsOutLine ? Infrastructure.Utility.GetBtnOutLineColorByBootstrapColor(BootstrapColor) : Infrastructure.Utility.GetBtnColorByBootstrapColor(BootstrapColor)) @(IsWidth100 ? "w-100" : "") @(Class)">
+        @if (ChildContent is null)
+        {
+            @: هیچ عنوانی ثبت نشده
+        }
+        else
+        {
+            @ChildContent
+        }
+    </a>
+}
+else
+{
+    <button title="@(Title)"
+            type="button"
+            @onclick="args => OnCLick.InvokeAsync(args)"
+            class="btn @(IsSmall ? "btn-sm" : "") @(IsOutLine ? Infrastructure.Utility.GetBtnOutLineColorByBootstrapColor(BootstrapColor) : Infrastructure.Utility.GetBtnColorByBootstrapColor(BootstrapColor)) @(IsWidth100 ? "w-100" : "") @(Class)">
+        @if (ChildContent is null)
+        {
+            @: هیچ عنوانی ثبت نشده
+        }
+        else
+        {
+            @ChildContent
+        }
+    </button>
+}
+
+@code {
+    [Parameter] public BootstrapColor BootstrapColor { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Title { get; set; }
+
+    [Parameter] public bool IsSmall { get; set; } = true;
+
+    [Parameter] public bool IsOutLine { get; set; } = false;
+
+    [Parameter] public bool IsWidth100 { get; set; } = false;
+
+    [Parameter] public EventCallback<MouseEventArgs> OnCLick { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public string? Href { get; set; }
+
+    [Parameter] public bool OpenInNewTab { get; set; } = false;
+}

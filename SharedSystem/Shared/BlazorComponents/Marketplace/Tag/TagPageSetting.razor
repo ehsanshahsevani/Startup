@@ -1,0 +1,61 @@
+@using SampleResult
+@inject PageSettingService PageSettingService
+@inject RequestResultService RequestResultService
+
+@if (Tags is not null)
+{
+    <TagViewer Tags="Tags"
+               TagsSelected="TagsSelected"
+               ShowHeader="ShowHeader!.Value"
+               OnSelectKey="args => OnSelectKey.InvokeAsync(args)"/>
+}
+
+@code {
+    public Dictionary<string, string>? Tags { get; set; }
+
+    [Parameter] public string? TagStarter { get; set; }
+
+    [Parameter] public bool? ShowHeader { get; set; }
+
+    [Parameter] public Dictionary<string, string>? TagsSelected { get; set; }
+    [Parameter] public EventCallback<Dictionary<string, string>> OnSelectKey { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ShowHeader.HasValue == false)
+        {
+            ShowHeader = true;
+        }
+        
+        await SetTagsAsync();
+    }
+
+    private async Task SetTagsAsync()
+    {
+        Result<List<TagPageSettingResponseViewModel>> result;
+
+        if (string.IsNullOrEmpty(TagStarter) == true)
+        {
+            result = await PageSettingService.GetTagsAsync();
+        }
+        else
+        {
+            result = await PageSettingService.GetTagsByStartNameAsync(TagStarter);
+        }
+
+        RequestResultService.AddResult(result);
+
+        if (result.IsSuccess == true)
+        {
+            Tags = new Dictionary<string, string>();
+
+            foreach (var item in result.Value!)
+            {
+                Tags.Add(item.NameEn, item.NameFa);
+            }
+
+            StateHasChanged();
+        }
+    }
+
+}

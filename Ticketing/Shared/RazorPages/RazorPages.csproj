@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\background.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\exampleJsInterop.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="PageModals\" />
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="PageModals\ModalImageBranchChanger.razor" />
+      <AdditionalFiles Include="PageModals\ModalImageProductChanger.razor" />
+      <AdditionalFiles Include="PageModals\ModalMoveProductFromCategoryToCategory.razor" />
+      <AdditionalFiles Include="PageModals\ModalPriceChanger.razor" />
+      <AdditionalFiles Include="PageModals\ModalPriceCreator.razor" />
+      <AdditionalFiles Include="PageModals\ModalProfileProductChanger.razor" />
+    </ItemGroup>
+
+</Project>

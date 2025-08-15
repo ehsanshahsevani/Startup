@@ -1,0 +1,7 @@
+<Button OnCLick="OnClick" BootstrapColor="BootstrapColor.Danger" IsOutLine="true" IsSmall="true">
+    <i class="bi bi-dash"> </i>
+</Button>
+
+@code {
+    [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+}

@@ -1,0 +1,17 @@
+<span class="badge @(Infrastructure.Utility.GetBackgoundColorByBootstrapColor(BackgroundColor))
+ @(Infrastructure.Utility.GetForgroundColorByBootstrapColor(ForegroundColor)) @(Class)">
+    
+    @if (ChildContent is null)
+    {
+        @(Resources.Messages.EmptyText)
+    }
+
+    @(ChildContent)
+</span>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public BootstrapColor BackgroundColor { get; set; }
+    [Parameter] public BootstrapColor ForegroundColor { get; set; }
+    [Parameter] public string? Class { get; set; }
+}

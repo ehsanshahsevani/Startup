@@ -1,0 +1,28 @@
+@if (string.IsNullOrEmpty(Header) == true)
+{
+    return;
+}
+
+<FormControlSection OneRow="true" IsTextCenter="true"/>
+<h5 class="border-0 border-2 border-end border-warning pe-2 w-100">
+    @(Header)
+    @if (string.IsNullOrEmpty(IconClass) == false)
+    {
+        @: &nbsp
+        <i class="@(IconClass)"></i>
+    }
+</h5>
+<FormControlSection OneRow="true" IsTextCenter="true"/>
+
+@code {
+    [Parameter] public string? Header { get; set; }
+    [Parameter] public string? IconClass { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(Header) == true)
+        {
+            throw new NullReferenceException(nameof(Header));
+        }
+    }
+}

@@ -1,0 +1,37 @@
+<Button IsSmall="true"
+        IsOutLine="true"
+        IsWidth100="false"
+        BootstrapColor="BootstrapColor.Primary"
+        title="@(Resources.ButtonCaptions.Search)"
+        OnCLick="args => OnCLick.InvokeAsync(args)">
+    
+    @switch (DisplayType)
+    {
+        case DisplayType.Icon:
+        {
+            <i class="bi bi-search"></i>
+            break;
+        }
+        case DisplayType.IconAndText:
+        {
+            @(Resources.ButtonCaptions.Search)
+            @: &nbsp;
+            <i class="bi bi-search"></i>
+            break;
+        }
+        case DisplayType.Text:
+        {
+            @(Resources.ButtonCaptions.Search)
+            break;
+        }
+    }
+    
+</Button>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCLick { get; set; }
+
+    [Parameter]
+    public DisplayType DisplayType { get; set; }
+}

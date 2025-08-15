@@ -1,0 +1,27 @@
+<div class="d-flex align-items-center justify-content-center">
+    <div class="rounded rounded-5 text-center p-4 shadow-sm">
+        <div class="bg- text-end">
+            <h5 class="mb-3 fw-bold">
+                <i class="bi bi-exclamation-triangle-fill text-danger fs-4 mb-3"></i>
+                خطا در دریافت اطلاعات
+            </h5>
+            <p class=" text-muted mb-4">متأسفانه در دریافت اطلاعات مشکلی پیش آمده است</p>
+            <div class="text-center">
+                <Button BootstrapColor="BootstrapColor.Warning" OnCLick="@(ReloadPage)">
+                    @(Resources.DataDictionary.GetAgain)
+                    <i class="bi bi-arrow-repeat"></i>
+                </Button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    private NavigationManager? Navigation { get; set; }
+
+    private void ReloadPage()
+    {
+        Navigation!.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+}
